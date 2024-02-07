@@ -58,15 +58,50 @@
             /* width: 100%; */
             text-align: center;
         }
+
+
+        /* CSS */
+        #button {
+            background-color: #EA4C89;
+            border-radius: 8px;
+            border-style: none;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            height: 40px;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            outline: none;
+            padding: 10px 16px;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            transition: color 100ms;
+            vertical-align: baseline;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .button-1:hover,
+        .button-1:focus {
+            background-color: #F082AC;
+        }
     </style>
 </head>
 
 <body>
     <h1>Jee Mains Marks Calculator</h1>
     <div id="responsediv">
-        <p>Put your response sheet/attempted answers here in html format. You can save it by using ctrl+s while on the webpage. In phones you can save the page and then select it here. Should work for all shifts now</p>
+        <p>Put your response sheet/attempted answers here in html format. You can save it by using ctrl+s while on the Jee main responses website. In phones you can save the page and then select it here. Should work for all shifts now. IMPORTANT: It will only work if file was originally saved as HTML, PDFs converted to HTMLs won't work</p>
         <input id="responsesheet" type="file" id="responsesheet">
         <label for="file">Select File</label>
+        <!-- <button id="button">Calculate</button> -->
     </div>
     <div>
         <p id="marks"></p>
