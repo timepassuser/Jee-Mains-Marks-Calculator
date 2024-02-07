@@ -67,11 +67,12 @@ function marksCalculator(responses, anskey) {
                 row.insertCell().innerText = responses[questionId][3][option - 1]
 
             } else if (responses[questionId][0] === "SA") {
-                if (responses[questionId][2] === option) { //correct
+                if (parseInt(responses[questionId][2]) === option) { //correct
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "SA"
                     row.insertCell().innerText = "Correct ✅"
                 } else {
+                    // console.log(typeof(responses[questionId][2]), typeof(option))
                     correctIncorrect[responses[questionId][1] + 'i'] += 1
                     row.insertCell().innerText = "SA"
                     row.insertCell().innerText = "Wrong ❌"
@@ -198,6 +199,7 @@ function getResponses(responsecontent) {
                 var ansMatch = ansText.match(ansRegex);
                 // console.log(ansText)
                 ans = ansMatch[1];
+                console.log("ans is ", ans)
                 responses[questionId] = ["SA", section, ans];
 
             }
