@@ -25,28 +25,58 @@ function marksCalculator(responses, anskey) {
         "CAi": 0,
         "CBi": 0
     }
-    for (let questionId of Object.keys(anskey)) {
+
+    mathTable = document.getElementById("maths")
+    phyTable = document.getElementById("physics")
+    chemTable = document.getElementById("chem")
+    subjectTables = {
+        "MA": mathTable,
+        "MB": mathTable,
+        "PA": phyTable,
+        "PB": phyTable,
+        "CA": chemTable,
+        "CB": chemTable
+    }
+
+    for (let questionId of Object.keys(anskey).sort()) {
         option = anskey[questionId]
+        subjectTable = subjectTables[responses[questionId][1]]
+        row = subjectTable.insertRow()
+        row.insertCell().innerText = questionId
         // console.log(responses[questionId])
         if (responses[questionId]) {
             // console.log(responses[questionId])
             if (responses[questionId][0] === "NA") {
                 console.log("Not attempted", responses[questionId])
+                row.insertCell().innerText = responses[questionId][2] // type of question
+                row.insertCell().innerText = "Not Attempted"
+                row.insertCell().innerText = "NA"
             } else if (responses[questionId][0] === "MCQ") {
                 // console.log(responses[questionId][2], responses[questionId][3], option)
                 if (responses[questionId][2] === responses[questionId][3][option - 1]) { //correct
                     // console.log("CORRECT MCQ")
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
+                    row.insertCell().innerText = "MCQ"
+                    row.insertCell().innerText = "Correct ✅"
                 } else {
                     // console.log("incorrect mcq ", responses[questionId])
                     correctIncorrect[responses[questionId][1] + 'i'] += 1
+                    row.insertCell().innerText = "MCQ"
+                    row.insertCell().innerText = "Wrong ❌"
                 }
+                row.insertCell().innerText = responses[questionId][3][option - 1]
+
             } else if (responses[questionId][0] === "SA") {
                 if (responses[questionId][2] === option) { //correct
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
+                    row.insertCell().innerText = "SA"
+                    row.insertCell().innerText = "Correct ✅"
                 } else {
                     correctIncorrect[responses[questionId][1] + 'i'] += 1
+                    row.insertCell().innerText = "SA"
+                    row.insertCell().innerText = "Wrong ❌"
                 }
+                row.insertCell().innerText = option
             }
         } else {
             console.log("WTF")
@@ -131,7 +161,11 @@ function getResponses(responsecontent) {
 
         // console.log(elementText)
         if (elementText.includes("Not Answered") || elementText.includes("Not Attempted")) {
-            responses[questionId] = ["NA", section]
+            if (elementText.includes("MCQ")) {
+                responses[questionId] = ["NA", section, "MCQ"]
+            } else {
+                responses[questionId] = ["NA", section, "SA"]
+            }
         } else {
             if (elementText.includes("MCQ")) {
                 var option1IdRegex = /Option\s*1\s*ID\s*:\s*(\d+)/;

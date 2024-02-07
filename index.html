@@ -27,6 +27,31 @@
             border: 3px solid green;
             padding: 10px;
         }
+
+        .subject {
+            font-weight: bold;
+            font-size: larger;
+        }
+
+        .subjecttable {
+            /* background-color: #9ec8f0; */
+            /* border: 1px solid; */
+            width: 100%;
+
+        }
+
+        th,
+        td {
+            border: 1px solid;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f39c9c;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #9ec8f0;
+        }
     </style>
 </head>
 
@@ -41,9 +66,33 @@
         <p id="marks"></p>
     </div>
     <div>
-        <table id="maths"></table>
-        <table id="physics"></table>
-        <table id="chem"></table>
+        <p class="subject">Maths Question Analysis</p>
+        <table class="subjecttable" id="maths">
+            <tr>
+                <th>QuestionID</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Selected OptionId/Integer Answer</th>
+            </tr>
+        </table>
+        <p class="subject">Physics Question Analysis</p>
+        <table class="subjecttable" id="physics">
+            <tr>
+                <th>QuestionID</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Selected OptionId/Integer Answer</th>
+            </tr>
+        </table>
+        <p class="subject">Chemistry Question Analysis</p>
+        <table class="subjecttable" id="chem">
+            <tr>
+                <th>QuestionID</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Selected OptionId/Integer Answer</th>
+            </tr>
+        </table>
     </div>
 </body>
 
