@@ -37,6 +37,7 @@ function marksCalculator(responses, anskey) {
         "CA": chemTable,
         "CB": chemTable
     }
+    totalAttempted = 0
 
     for (let questionId of Object.keys(anskey).sort()) {
         option = anskey[questionId]
@@ -52,6 +53,7 @@ function marksCalculator(responses, anskey) {
                 row.insertCell().innerText = "Not Attempted"
                 row.insertCell().innerText = "NA"
             } else if (responses[questionId][0] === "MCQ") {
+                totalAttempted += 1
                 // console.log(responses[questionId][2], responses[questionId][3], option)
                 if (responses[questionId][2] === responses[questionId][3][option - 1]) { //correct
                     // console.log("CORRECT MCQ")
@@ -67,6 +69,7 @@ function marksCalculator(responses, anskey) {
                 row.insertCell().innerText = responses[questionId][3][option - 1]
 
             } else if (responses[questionId][0] === "SA") {
+                totalAttempted += 1
                 if (parseInt(responses[questionId][2]) === option) { //correct
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "SA"
@@ -96,6 +99,7 @@ function marksCalculator(responses, anskey) {
     marksElement.innerText = `Your total score is ${totalScore}\nMath section A score is ${mathAscore}\nMath section B score is ${mathBscore}\nPhysics section A score is ${phyAscore}\nPhysics section B score is ${phyBscore}\nChem section A score is ${chemAscore}\nChem section B score is ${chemBscore}`
 
     resultString = `\n
+Total no. of questions attempted is ${totalAttempted}
 Maths section A no. of correct is ${correctIncorrect["MAc"]}
 Maths section A no. of incorrect is ${correctIncorrect["MAi"]}
 Maths section B no. of correct is ${correctIncorrect["MBc"]}
