@@ -1,31 +1,22 @@
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
-    <title> Jee Main marks calculator</title>
+    <title>Jee Main marks calculator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
     <script src="main.js" defer></script>
     <script src="answerkeys.js"></script>
     <style>
         .text {
-            color: white;
             font-size: large;
-
         }
 
         h1 {
-            color: #111;
-            font-family: 'Helvetica Neue', sans-serif;
+            font-family: "Helvetica Neue", sans-serif;
             font-size: 250%;
             font-weight: bold;
             letter-spacing: -1px;
             line-height: 1;
             text-align: center;
-        }
-
-        #responsesheet {
-            margin: auto;
-            width: 100%;
-            border: 3px solid green;
-            padding: 10px;
         }
 
         .subject {
@@ -38,7 +29,6 @@
             /* background-color: #9ec8f0; */
             /* border: 1px solid; */
             width: 100%;
-
         }
 
         th,
@@ -47,11 +37,11 @@
         }
 
         tr:nth-child(even) {
-            background-color: #f39c9c;
+            background-color: #424242;
         }
 
         tr:nth-child(odd) {
-            background-color: #9ec8f0;
+            background-color: #191919;
         }
 
         #marks {
@@ -59,17 +49,17 @@
             text-align: center;
         }
 
-
         /* CSS */
         #button {
-            background-color: #EA4C89;
+            background-color: #ea4c89;
             border-radius: 8px;
             border-style: none;
             box-sizing: border-box;
-            color: #FFFFFF;
+            color: #ffffff;
             cursor: pointer;
             display: inline-block;
-            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+                sans-serif;
             font-size: 14px;
             font-weight: 500;
             height: 40px;
@@ -90,50 +80,70 @@
 
         .button-1:hover,
         .button-1:focus {
-            background-color: #F082AC;
+            background-color: #f082ac;
+        }
+
+        .custom-container {
+            flex-wrap: wrap;
+            /* Allows children to wrap within the container */
+        }
+
+        .custom-container>div {
+            flex: 1;
+            /* Each child div will take up equal space within the container */
+            margin: 10px;
+            /* Adjust margin as needed */
+            box-sizing: border-box;
+            /* Ensures padding and border are included in the width */
         }
     </style>
 </head>
 
 <body>
-    <h1>Jee Mains Marks Calculator</h1>
-    <div id="responsediv">
-        <p>Put your response sheet/attempted answers here in html format. You can save it by using ctrl+s while on the Jee main responses website. In phones you can save the page and then select it here. Should work for all shifts now. IMPORTANT: It will only work if file was originally saved as HTML, PDFs converted to HTMLs won't work</p>
-        <input id="responsesheet" type="file" id="responsesheet">
-        <label for="file">Select File</label>
-        <!-- <button id="button">Calculate</button> -->
-    </div>
-    <div>
-        <p id="marks"></p>
-    </div>
-    <div>
-        <p class="subject">Maths Question Analysis</p>
-        <table class="subjecttable" id="maths">
-            <tr>
-                <th>QuestionID</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Selected OptionId/Integer Answer</th>
-            </tr>
-        </table>
-        <p class="subject">Physics Question Analysis</p>
-        <table class="subjecttable" id="physics">
-            <tr>
-                <th>QuestionID</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Selected OptionId/Integer Answer</th>
-            </tr>
-        </table>
-        <p class="subject">Chemistry Question Analysis</p>
-        <table class="subjecttable" id="chem">
-            <tr>
-                <th>QuestionID</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Selected OptionId/Integer Answer</th>
-            </tr>
-        </table>
+    <div class="custom-container" data-theme="dark">
+        <h1>Jee Mains Marks Calculator</h1>
+        <div id="responsediv">
+            <p>
+                Put your response sheet/attempted answers here in html format. You can
+                save it by using ctrl+s while on the Jee main responses website. In
+                phones you can save the page and then select it here. Should work for
+                all shifts now. IMPORTANT: It will only work if file was originally
+                saved as HTML, PDFs converted to HTMLs won't work
+            </p>
+            <input id="responsesheet" type="file" id="responsesheet" />
+        </div>
+        <div>
+            <p id="marks"></p>
+        </div>
+        <div>
+            <p class="subject">Maths Question Analysis</p>
+            <table class="subjecttable" id="maths">
+                <tr>
+                    <th>QuestionID</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Selected OptionId/Integer Answer</th>
+                </tr>
+            </table>
+            <p class="subject">Physics Question Analysis</p>
+            <table class="subjecttable" id="physics">
+                <tr>
+                    <th>QuestionID</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Selected OptionId/Integer Answer</th>
+                </tr>
+            </table>
+            <p class="subject">Chemistry Question Analysis</p>
+            <table class="subjecttable" id="chem">
+                <tr>
+                    <th>QuestionID</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Selected OptionId/Integer Answer</th>
+                </tr>
+            </table>
+        </div>
     </div>
 </body>
 
