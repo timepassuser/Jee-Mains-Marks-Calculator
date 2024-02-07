@@ -86,7 +86,7 @@ function marksCalculator(responses, anskey) {
             console.log("WTF")
         }
     }
-    console.log(correctIncorrect)
+    // console.log(correctIncorrect)
     mathAscore = correctIncorrect["MAc"] * 4 - correctIncorrect["MAi"]
     mathBscore = correctIncorrect["MBc"] * 4 - correctIncorrect["MBi"]
     phyAscore = correctIncorrect["PAc"] * 4 - correctIncorrect["PAi"]
@@ -94,7 +94,7 @@ function marksCalculator(responses, anskey) {
     chemAscore = correctIncorrect["CAc"] * 4 - correctIncorrect["CAi"]
     chemBscore = correctIncorrect["CBc"] * 4 - correctIncorrect["CBi"]
     totalScore = mathAscore + mathBscore + phyAscore + phyBscore + chemAscore + chemBscore
-    console.log(mathAscore, mathBscore, phyAscore, phyBscore, chemAscore, chemBscore, totalScore)
+    // console.log(mathAscore, mathBscore, phyAscore, phyBscore, chemAscore, chemBscore, totalScore)
     marksElement = document.getElementById("marks")
     marksElement.innerText = `Your total score is ${totalScore}\nMath section A score is ${mathAscore}\nMath section B score is ${mathBscore}\nPhysics section A score is ${phyAscore}\nPhysics section B score is ${phyBscore}\nChem section A score is ${chemAscore}\nChem section B score is ${chemBscore}`
 
