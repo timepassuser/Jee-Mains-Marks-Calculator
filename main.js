@@ -48,7 +48,7 @@ function marksCalculator(responses, anskey) {
         if (responses[questionId]) {
             // console.log(responses[questionId])
             if (responses[questionId][0] === "NA") {
-                console.log("Not attempted", responses[questionId])
+                // console.log("Not attempted", responses[questionId])
                 row.insertCell().innerText = responses[questionId][2] // type of question
                 row.insertCell().innerText = "Not Attempted"
                 row.insertCell().innerText = "NA"
@@ -202,8 +202,12 @@ function getResponses(responsecontent) {
                 var ansRegex = /Given Answer\s*:\s*(\d+)/;
                 var ansMatch = ansText.match(ansRegex);
                 // console.log(ansText)
-                ans = ansMatch[1];
-                console.log("ans is ", ans)
+                if (ansMatch === null) {
+                    console.log(ansText)
+                } else {
+                    ans = ansMatch[1];
+                }
+                // console.log("ans is ", ans)
                 responses[questionId] = ["SA", section, ans];
 
             }
@@ -218,6 +222,7 @@ function getResponses(responsecontent) {
 
 
 fileElement = document.getElementById("responsesheet")
+button = document.getElementById("button")
 fileElement.onchange = () => {
     responsesheet = responsesheet.files[0];
     if (responsesheet) {
@@ -228,7 +233,7 @@ fileElement.onchange = () => {
             // console.log(evt.target.result);
             responsecontent = evt.target.result;
             responses = getResponses(responsecontent)
-            console.log(responses)
+            // console.log(responses)
             anskey = getAnskey(responsecontent)
             // console.log(anskey)
             marksCalculator(responses, anskey)
