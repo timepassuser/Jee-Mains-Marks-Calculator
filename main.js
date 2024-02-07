@@ -66,7 +66,7 @@ function marksCalculator(responses, anskey) {
                     row.insertCell().innerText = "MCQ"
                     row.insertCell().innerText = "Wrong ❌"
                 }
-                row.insertCell().innerText = responses[questionId][3][option - 1]
+                row.insertCell().innerText = responses[questionId][2]
 
             } else if (responses[questionId][0] === "SA") {
                 totalAttempted += 1
@@ -199,7 +199,7 @@ function getResponses(responsecontent) {
             } else {
                 questiontbl = menutbls[i].parentElement.children[0]
                 ansText = questiontbl.innerText;
-                var ansRegex = /Given Answer\s*:\s*(\d+)/;
+                var ansRegex = /(?:Q\.\d+)?\s*Given Answer\s*:\s*(-?\d+)/;
                 var ansMatch = ansText.match(ansRegex);
                 // console.log(ansText)
                 if (ansMatch === null) {
