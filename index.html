@@ -31,6 +31,7 @@
         .subject {
             font-weight: bold;
             font-size: larger;
+            text-align: center;
         }
 
         .subjecttable {
@@ -52,13 +53,18 @@
         tr:nth-child(odd) {
             background-color: #9ec8f0;
         }
+
+        #marks {
+            /* width: 100%; */
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
     <h1>Jee Mains Marks Calculator</h1>
     <div id="responsediv">
-        <p>Put your response sheet/attempted answers here in html format. You can save it by using ctrl+s while on the webpage</p>
+        <p>Put your response sheet/attempted answers here in html format. You can save it by using ctrl+s while on the webpage. In phones you can save the page and then select it here.</p>
         <input id="responsesheet" type="file" id="responsesheet">
         <label for="file">Select File</label>
     </div>
