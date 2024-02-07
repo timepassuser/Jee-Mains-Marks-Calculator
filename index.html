@@ -1,0 +1,50 @@
+<html lang="en">
+
+<head>
+    <title> Jee Main marks calculator</title>
+    <script src="main.js" defer></script>
+    <script src="answerkeys.js"></script>
+    <style>
+        .text {
+            color: white;
+            font-size: large;
+
+        }
+
+        h1 {
+            color: #111;
+            font-family: 'Helvetica Neue', sans-serif;
+            font-size: 250%;
+            font-weight: bold;
+            letter-spacing: -1px;
+            line-height: 1;
+            text-align: center;
+        }
+
+        #responsesheet {
+            margin: auto;
+            width: 100%;
+            border: 3px solid green;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Jee Mains Marks Calculator</h1>
+    <div id="responsediv">
+        <p>Put your response sheet/attempted answers here in html format. You can save it by using ctrl+s while on the webpage</p>
+        <input id="responsesheet" type="file" id="responsesheet">
+        <label for="file">Select File</label>
+    </div>
+    <div>
+        <p id="marks"></p>
+    </div>
+    <div>
+        <table id="maths"></table>
+        <table id="physics"></table>
+        <table id="chem"></table>
+    </div>
+</body>
+
+</html>
