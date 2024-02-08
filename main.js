@@ -266,8 +266,10 @@ function getAnskey(responsecontent) {
 }
 
 function getResponses(responsecontent) {
-    var e = document.createElement("html");
-    e.innerHTML = responsecontent;
+    // var e = document.createElement("html");
+    // e.innerHTML = responsecontent;
+    parser = new DOMParser()
+    e = parser.parseFromString(responsecontent, "text/html")
     menutbls = e.getElementsByClassName("menu-tbl");
     responses = {};
     for (let i = 0; i < menutbls.length; i++) {
