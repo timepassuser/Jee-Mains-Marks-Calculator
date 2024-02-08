@@ -65,6 +65,11 @@ function marksCalculator(responses, anskey) {
                 row.insertCell().innerText = responses[questionId][2] // type of question
                 row.insertCell().innerText = "Not Attempted"
                 row.insertCell().innerText = "NA"
+                if (responses[questionId][2] === "MCQ") {
+                    row.insertCell().innerText = responses[questionId][3][option - 1];
+                } else {
+                    row.insertCell().innerText = option;
+                }
             } else if (responses[questionId][0] === "MCQ") {
                 totalAttempted += 1
                 // console.log(responses[questionId][2], responses[questionId][3], option)
@@ -80,6 +85,7 @@ function marksCalculator(responses, anskey) {
                     row.insertCell().innerText = "Wrong ❌"
                 }
                 row.insertCell().innerText = responses[questionId][2]
+                row.insertCell().innerText = responses[questionId][3][option - 1]
 
             } else if (responses[questionId][0] === "SA") {
                 totalAttempted += 1
@@ -93,7 +99,8 @@ function marksCalculator(responses, anskey) {
                     row.insertCell().innerText = "SA"
                     row.insertCell().innerText = "Wrong ❌"
                 }
-                row.insertCell().innerText = option
+                row.insertCell().innerText = responses[questionId][0];
+                row.insertCell().innerText = option;
             }
         } else {
             console.log("WTF")
@@ -203,6 +210,7 @@ function newMarksCalculator(responses, anskey) {
                 }
                 row.insertCell().innerText = option
             }
+            row.insertCell().innerText = option;
         } else {
             console.log("WTF")
         }
@@ -240,8 +248,9 @@ Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
 
 
 function getAnskey(responsecontent) {
-    // var e = document.createElement("html");
+    // var e = document.createElement("html");  // BAD method, don't ever use
     // e.innerHTML = responsecontent;
+    // This is the correct way
     parser = new DOMParser()
     e = parser.parseFromString(responsecontent, "text/html");
     table = e.getElementsByClassName("main-info-pnl")[0].children[2].children[0]
@@ -268,8 +277,9 @@ function getAnskey(responsecontent) {
 }
 
 function getResponses(responsecontent) {
-    // var e = document.createElement("html");
+    // var e = document.createElement("html");  // BAD method, don't ever use
     // e.innerHTML = responsecontent;
+    // This is the correct way
     parser = new DOMParser()
     e = parser.parseFromString(responsecontent, "text/html")
     menutbls = e.getElementsByClassName("menu-tbl");
@@ -293,7 +303,18 @@ function getResponses(responsecontent) {
         // console.log(elementText)
         if (elementText.includes("Not Answered") || elementText.includes("Not Attempted")) {
             if (elementText.includes("MCQ")) {
-                responses[questionId] = ["NA", section, "MCQ"]
+                var option1IdRegex = /Option\s*1\s*ID\s*:\s*(\d+)/;
+                var option2IdRegex = /Option\s*2\s*ID\s*:\s*(\d+)/;
+                var option3IdRegex = /Option\s*3\s*ID\s*:\s*(\d+)/;
+                var option4IdRegex = /Option\s*4\s*ID\s*:\s*(\d+)/;
+                var chosenOptionRegex = /Chosen\s*Option\s*:\s*(\d+)/;
+
+                var option1IdMatch = elementText.match(option1IdRegex);
+                var option2IdMatch = elementText.match(option2IdRegex);
+                var option3IdMatch = elementText.match(option3IdRegex);
+                var option4IdMatch = elementText.match(option4IdRegex);
+                optionIds = [option1IdMatch[1], option2IdMatch[1], option3IdMatch[1], option4IdMatch[1]]
+                responses[questionId] = ["NA", section, "MCQ", optionIds.sort()]
             } else {
                 responses[questionId] = ["NA", section, "SA"]
             }
@@ -317,8 +338,8 @@ function getResponses(responsecontent) {
                 var option2IdMatch = elementText.match(option2IdRegex);
                 var option3IdMatch = elementText.match(option3IdRegex);
                 var option4IdMatch = elementText.match(option4IdRegex);
-                var chosenOptionMatch = elementText.match(chosenOptionRegex);
                 optionIds = [option1IdMatch[1], option2IdMatch[1], option3IdMatch[1], option4IdMatch[1]]
+                var chosenOptionMatch = elementText.match(chosenOptionRegex);
                 chosenOptionId = optionIds[parseInt(chosenOptionMatch[1]) - 1]
                 responses[questionId] = ["MCQ", section, chosenOptionId, optionIds.sort()]
 
