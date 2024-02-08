@@ -240,8 +240,10 @@ Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
 
 
 function getAnskey(responsecontent) {
-    var e = document.createElement("html");
-    e.innerHTML = responsecontent;
+    // var e = document.createElement("html");
+    // e.innerHTML = responsecontent;
+    parser = new DOMParser()
+    e = parser.parseFromString(responsecontent, "text/html");
     table = e.getElementsByClassName("main-info-pnl")[0].children[2].children[0]
     date = table.children[3].children[1].innerText
     time = table.children[4].children[1].innerText
