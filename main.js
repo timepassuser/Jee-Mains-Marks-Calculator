@@ -129,7 +129,7 @@ Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
     marksElement.innerText += resultString;
 }
 
-// Thanks to nta releasing new format of ans keys, now I have to modify the original marksCalculator to this. Thankfully only two lines needs to be changed
+// Thanks to nta releasing new format of ans keys, now I have to modify the original marksCalculator to this. Thankfully only two lines need to be changed
 function newMarksCalculator(responses, anskey) {
     console.log("newMarksCalculator is running")
     correctIncorrect = {
@@ -191,7 +191,7 @@ function newMarksCalculator(responses, anskey) {
 
             } else if (responses[questionId][0] === "SA") {
                 totalAttempted += 1
-                if (responses[questionId][2] === option) { //correct
+                if (parseInt(responses[questionId][2]) === parseInt(option)) { //correct
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "SA"
                     row.insertCell().innerText = "Correct ✅"
@@ -325,7 +325,7 @@ function getResponses(responsecontent) {
                 var ansMatch = ansText.match(ansRegex);
                 // console.log(ansText)
                 if (ansMatch === null) {
-                    console.log(ansText)
+                    console.log(ansText, "<<< this is ansText")
                 } else {
                     ans = ansMatch[1];
                 }
@@ -343,10 +343,12 @@ function getResponses(responsecontent) {
 }
 
 
-fileElement = document.getElementById("responsesheet")
+fileElement = document.getElementById("fileElement")
 button = document.getElementById("button")
 fileElement.onchange = () => {
-    responsesheet = responsesheet.files[0];
+    // console.log(responsesheet)
+    responsesheet = fileElement.files[0];
+    // console.log(responsesheet)
     if (responsesheet) {
         // console.log(responsesheet)
         var reader = new FileReader();
