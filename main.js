@@ -1,10 +1,23 @@
 // This function is to be used in an answer key console to generate answers object from it
+// For the old answer keys which have option number in ascending order instead of the optionId of the correct option
 function parseAnswerKey() {
     anskey = {}
     rows = document.getElementsByClassName("form-options-item");
     for (let i = 0; i < rows.length; i++) {
         questionId = rows[i].children[1].innerText;
         correctOption = parseInt(rows[i].children[2].innerText);
+        anskey[questionId] = correctOption
+    }
+    return anskey
+}
+
+// For new answer keys with the option Id of the correct option
+function newParseAnswerKey() {
+    anskey = {}
+    rows = document.getElementsByClassName("form-options-item");
+    for (let i = 0; i < rows.length; i++) {
+        questionId = rows[i].children[1].innerText;
+        correctOption = rows[i].children[2].innerText;
         anskey[questionId] = correctOption
     }
     return anskey
@@ -114,6 +127,115 @@ Chemistry section B no. of correct is ${correctIncorrect["CBc"]}
 Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
 `;
     marksElement.innerText += resultString;
+}
+
+// Thanks to nta releasing new format of ans keys, now I have to modify the original marksCalculator to this. Thankfully only two lines needs to be changed
+function newMarksCalculator(responses, anskey) {
+    console.log("newMarksCalculator is running")
+    correctIncorrect = {
+        "MAc": 0,
+        "MBc": 0,
+        "PAc": 0,
+        "PBc": 0,
+        "CAc": 0,
+        "CBc": 0,
+        "MAi": 0,
+        "MBi": 0,
+        "PAi": 0,
+        "PBi": 0,
+        "CAi": 0,
+        "CBi": 0
+    }
+
+    mathTable = document.getElementById("maths")
+    phyTable = document.getElementById("physics")
+    chemTable = document.getElementById("chem")
+    subjectTables = {
+        "MA": mathTable,
+        "MB": mathTable,
+        "PA": phyTable,
+        "PB": phyTable,
+        "CA": chemTable,
+        "CB": chemTable
+    }
+    totalAttempted = 0
+
+    for (let questionId of Object.keys(anskey).sort()) {
+        option = anskey[questionId]
+        subjectTable = subjectTables[responses[questionId][1]]
+        row = subjectTable.insertRow()
+        row.insertCell().innerText = questionId
+        // console.log(responses[questionId])
+        if (responses[questionId]) {
+            // console.log(responses[questionId])
+            if (responses[questionId][0] === "NA") {
+                // console.log("Not attempted", responses[questionId])
+                row.insertCell().innerText = responses[questionId][2] // type of question
+                row.insertCell().innerText = "Not Attempted"
+                row.insertCell().innerText = "NA"
+            } else if (responses[questionId][0] === "MCQ") {
+                totalAttempted += 1
+                // console.log(responses[questionId][2], responses[questionId][3], option)
+                if (responses[questionId][2] === option) { //correct
+                    // console.log("CORRECT MCQ")
+                    correctIncorrect[responses[questionId][1] + 'c'] += 1
+                    row.insertCell().innerText = "MCQ"
+                    row.insertCell().innerText = "Correct ✅"
+                } else {
+                    console.log("incorrect mcq ", responses[questionId][2], option)
+                    correctIncorrect[responses[questionId][1] + 'i'] += 1
+                    row.insertCell().innerText = "MCQ"
+                    row.insertCell().innerText = "Wrong ❌"
+                }
+                row.insertCell().innerText = responses[questionId][2]
+
+            } else if (responses[questionId][0] === "SA") {
+                totalAttempted += 1
+                if (responses[questionId][2] === option) { //correct
+                    correctIncorrect[responses[questionId][1] + 'c'] += 1
+                    row.insertCell().innerText = "SA"
+                    row.insertCell().innerText = "Correct ✅"
+                } else {
+                    // console.log(typeof(responses[questionId][2]), typeof(option))
+                    correctIncorrect[responses[questionId][1] + 'i'] += 1
+                    row.insertCell().innerText = "SA"
+                    row.insertCell().innerText = "Wrong ❌"
+                }
+                row.insertCell().innerText = option
+            }
+        } else {
+            console.log("WTF")
+        }
+    }
+    // console.log(correctIncorrect)
+    mathAscore = correctIncorrect["MAc"] * 4 - correctIncorrect["MAi"]
+    mathBscore = correctIncorrect["MBc"] * 4 - correctIncorrect["MBi"]
+    phyAscore = correctIncorrect["PAc"] * 4 - correctIncorrect["PAi"]
+    phyBscore = correctIncorrect["PBc"] * 4 - correctIncorrect["PBi"]
+    chemAscore = correctIncorrect["CAc"] * 4 - correctIncorrect["CAi"]
+    chemBscore = correctIncorrect["CBc"] * 4 - correctIncorrect["CBi"]
+    totalScore = mathAscore + mathBscore + phyAscore + phyBscore + chemAscore + chemBscore
+    // console.log(mathAscore, mathBscore, phyAscore, phyBscore, chemAscore, chemBscore, totalScore)
+    marksElement = document.getElementById("marks")
+    marksElement.innerText = `Your total score is ${totalScore}\nMath section A score is ${mathAscore}\nMath section B score is ${mathBscore}\nPhysics section A score is ${phyAscore}\nPhysics section B score is ${phyBscore}\nChem section A score is ${chemAscore}\nChem section B score is ${chemBscore}`
+
+    resultString = `\n
+Total no. of questions attempted is ${totalAttempted}
+Maths section A no. of correct is ${correctIncorrect["MAc"]}
+Maths section A no. of incorrect is ${correctIncorrect["MAi"]}
+Maths section B no. of correct is ${correctIncorrect["MBc"]}
+Maths section B no. of incorrect is ${correctIncorrect["MBi"]}
+Physics section A no. of correct is ${correctIncorrect["PAc"]}
+Physics section A no. of incorrect is ${correctIncorrect["PAi"]}
+Physics section B no. of correct is ${correctIncorrect["PBc"]}
+Physics section B no. of incorrect is ${correctIncorrect["PBi"]}
+Chemistry section A no. of correct is ${correctIncorrect["CAc"]}
+Chemistry section A no. of incorrect is ${correctIncorrect["CAi"]}
+Chemistry section B no. of correct is ${correctIncorrect["CBc"]}
+Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
+`;
+    marksElement.innerText += resultString;
+
 }
 
 
