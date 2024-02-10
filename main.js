@@ -99,7 +99,7 @@ function marksCalculator(responses, anskey) {
                     row.insertCell().innerText = "SA"
                     row.insertCell().innerText = "Wrong ❌"
                 }
-                row.insertCell().innerText = responses[questionId][0];
+                row.insertCell().innerText = responses[questionId][2];
                 row.insertCell().innerText = option;
             }
         } else {
@@ -151,7 +151,9 @@ function newMarksCalculator(responses, anskey) {
         "PAi": 0,
         "PBi": 0,
         "CAi": 0,
-        "CBi": 0
+        "CBi": 0,
+        "dropMCQ": 0,
+        "dropSA": 0
     }
 
     mathTable = document.getElementById("maths")
@@ -178,37 +180,45 @@ function newMarksCalculator(responses, anskey) {
             if (responses[questionId][0] === "NA") {
                 // console.log("Not attempted", responses[questionId])
                 row.insertCell().innerText = responses[questionId][2] // type of question
-                row.insertCell().innerText = "Not Attempted"
+                if (option === "DROP" && responses[questionId][2] === "MCQ") {
+                    correctIncorrect["dropMCQ"] += 1;
+                    row.insertCell().innerText = "Not Attempted and Dropped";
+                } else {
+                    row.insertCell().innerText = "Not Attempted";
+                }
                 row.insertCell().innerText = "NA"
             } else if (responses[questionId][0] === "MCQ") {
                 totalAttempted += 1
+                row.insertCell().innerText = "MCQ"
                 // console.log(responses[questionId][2], responses[questionId][3], option)
-                if (responses[questionId][2] === option) { //correct
+                if (option === "DROP") {
+                    correctIncorrect["dropMCQ"] += 1
+                    row.insertCell().innerText = "Attempted and Dropped";
+                } else if (responses[questionId][2] === option) { //correct
                     // console.log("CORRECT MCQ")
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
-                    row.insertCell().innerText = "MCQ"
                     row.insertCell().innerText = "Correct ✅"
                 } else {
                     console.log("incorrect mcq ", responses[questionId][2], option)
                     correctIncorrect[responses[questionId][1] + 'i'] += 1
-                    row.insertCell().innerText = "MCQ"
                     row.insertCell().innerText = "Wrong ❌"
                 }
                 row.insertCell().innerText = responses[questionId][2]
 
             } else if (responses[questionId][0] === "SA") {
                 totalAttempted += 1
-                if (parseInt(responses[questionId][2]) === parseInt(option)) { //correct
+                row.insertCell().innerText = "SA"
+                if (option === "DROP") {
+                    row.insertCell().innerText = "Attempted and Dropped"
+                } else if (parseInt(responses[questionId][2]) === parseInt(option)) { //correct
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
-                    row.insertCell().innerText = "SA"
                     row.insertCell().innerText = "Correct ✅"
                 } else {
                     // console.log(typeof(responses[questionId][2]), typeof(option))
                     correctIncorrect[responses[questionId][1] + 'i'] += 1
-                    row.insertCell().innerText = "SA"
                     row.insertCell().innerText = "Wrong ❌"
                 }
-                row.insertCell().innerText = option
+                row.insertCell().innerText = responses[questionId][2]
             }
             row.insertCell().innerText = option;
         } else {
