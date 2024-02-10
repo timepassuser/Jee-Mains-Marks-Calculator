@@ -152,8 +152,6 @@ function newMarksCalculator(responses, anskey) {
         "PBi": 0,
         "CAi": 0,
         "CBi": 0,
-        "dropMCQ": 0,
-        "dropSA": 0
     }
 
     mathTable = document.getElementById("maths")
@@ -167,10 +165,15 @@ function newMarksCalculator(responses, anskey) {
         "CA": chemTable,
         "CB": chemTable
     }
-    totalAttempted = 0
+    totalAttempted = 0;
+    droppedInAnskey = 0;
+    dropAwardedList = [];
 
     for (let questionId of Object.keys(anskey).sort()) {
         option = anskey[questionId]
+        if (option === "DROP") {
+            droppedInAnskey += 1
+        }
         subjectTable = subjectTables[responses[questionId][1]]
         row = subjectTable.insertRow()
         row.insertCell().innerText = questionId
@@ -181,7 +184,8 @@ function newMarksCalculator(responses, anskey) {
                 // console.log("Not attempted", responses[questionId])
                 row.insertCell().innerText = responses[questionId][2] // type of question
                 if (option === "DROP" && responses[questionId][2] === "MCQ") {
-                    correctIncorrect["dropMCQ"] += 1;
+                    dropAwardedList.push(questionId)
+                    correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Not Attempted and Dropped";
                 } else {
                     row.insertCell().innerText = "Not Attempted";
@@ -192,7 +196,8 @@ function newMarksCalculator(responses, anskey) {
                 row.insertCell().innerText = "MCQ"
                 // console.log(responses[questionId][2], responses[questionId][3], option)
                 if (option === "DROP") {
-                    correctIncorrect["dropMCQ"] += 1
+                    dropAwardedList.push(questionId)
+                    correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Attempted and Dropped";
                 } else if (responses[questionId][2] === option) { //correct
                     // console.log("CORRECT MCQ")
@@ -209,6 +214,8 @@ function newMarksCalculator(responses, anskey) {
                 totalAttempted += 1
                 row.insertCell().innerText = "SA"
                 if (option === "DROP") {
+                    dropAwardedList.push(questionId)
+                    correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Attempted and Dropped"
                 } else if (parseInt(responses[questionId][2]) === parseInt(option)) { //correct
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
@@ -239,6 +246,7 @@ function newMarksCalculator(responses, anskey) {
 
     resultString = `\n
 Total no. of questions attempted is ${totalAttempted}
+(No. of correct also includes dropped questions for which you received marks)
 Maths section A no. of correct is ${correctIncorrect["MAc"]}
 Maths section A no. of incorrect is ${correctIncorrect["MAi"]}
 Maths section B no. of correct is ${correctIncorrect["MBc"]}
@@ -251,6 +259,9 @@ Chemistry section A no. of correct is ${correctIncorrect["CAc"]}
 Chemistry section A no. of incorrect is ${correctIncorrect["CAi"]}
 Chemistry section B no. of correct is ${correctIncorrect["CBc"]}
 Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
+
+Total no. of questions dropped in your answer key was: ${droppedInAnskey}
+You received marks for these dropped questions: ${dropAwardedList.length === 0 ? "None" : String(dropAwardedList).replace(',', ", ")}
 `;
     marksElement.innerText += resultString;
 
