@@ -206,7 +206,7 @@ function newMarksCalculator(responses, anskey) {
                     dropAwardedList.push(questionId)
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Attempted and Dropped";
-                } else if (responses[questionId][2] === option || responses[questionId][2] === option.split(',')[1]) { //correct
+                } else if (responses[questionId][2] === option || (responses[questionId][2] === option.split(',')[1] || responses[questionId][2] === option.split(',')[0])) { //correct
                     // console.log("CORRECT MCQ")
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Correct ✅"
