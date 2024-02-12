@@ -23,6 +23,13 @@ function newParseAnswerKey() {
     return anskey
 }
 
+function pdfParseAnswerKey(s) {
+    return s.split("\n").map(s => s.split(" ")).reduce((accumulator, current) => {
+        accumulator[current[0]] = current[1];
+        return accumulator
+    }, {})
+}
+
 function marksCalculator(responses, anskey) {
     correctIncorrect = {
         "MAc": 0,
@@ -171,7 +178,7 @@ function newMarksCalculator(responses, anskey) {
 
     for (let questionId of Object.keys(anskey).sort()) {
         option = anskey[questionId]
-        if (option === "DROP") {
+        if (option === "Drop") {
             droppedInAnskey += 1
         }
         subjectTable = subjectTables[responses[questionId][1]]
@@ -183,7 +190,7 @@ function newMarksCalculator(responses, anskey) {
             if (responses[questionId][0] === "NA") {
                 // console.log("Not attempted", responses[questionId])
                 row.insertCell().innerText = responses[questionId][2] // type of question
-                if (option === "DROP" && responses[questionId][2] === "MCQ") {
+                if (option === "Drop" && responses[questionId][2] === "MCQ") {
                     dropAwardedList.push(questionId)
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Not Attempted and Dropped";
@@ -195,11 +202,11 @@ function newMarksCalculator(responses, anskey) {
                 totalAttempted += 1
                 row.insertCell().innerText = "MCQ"
                 // console.log(responses[questionId][2], responses[questionId][3], option)
-                if (option === "DROP") {
+                if (option === "Drop") {
                     dropAwardedList.push(questionId)
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Attempted and Dropped";
-                } else if (responses[questionId][2] === option) { //correct
+                } else if (responses[questionId][2] === option || responses[questionId][2] === option.split(',')[1]) { //correct
                     // console.log("CORRECT MCQ")
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Correct ✅"
@@ -213,7 +220,7 @@ function newMarksCalculator(responses, anskey) {
             } else if (responses[questionId][0] === "SA") {
                 totalAttempted += 1
                 row.insertCell().innerText = "SA"
-                if (option === "DROP") {
+                if (option === "Drop") {
                     dropAwardedList.push(questionId)
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Attempted and Dropped"
@@ -406,7 +413,7 @@ fileElement.onchange = () => {
             // console.log(responses)
             anskey = getAnskey(responsecontent)
             // console.log(anskey)
-            marksCalculator(responses, anskey)
+            newMarksCalculator(responses, anskey)
         }
         reader.onerror = function(evt) {
             console.log("error reading file");
