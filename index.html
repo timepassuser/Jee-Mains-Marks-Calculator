@@ -114,6 +114,16 @@
             /* width: 50%; */
             /* border: 1px solid; */
         }
+
+        .sortButton {
+            width: 50%;
+            border: 3px solid;
+            border-color: rgb(240, 147, 147);
+        }
+
+        #buttonContainer {
+            display: flex;
+        }
     </style>
 </head>
 
@@ -133,6 +143,10 @@
         </div>
         <div>
             <p id="marks"></p>
+        </div>
+        <div id="buttonContainer">
+            <button class="sortButton" id="sortByAscending" onclick="sortInAscendingOrder=true;questionSort()">Sort questions in ascending order</button>
+            <button class="sortButton" id="sortByResponsesheet" onclick="sortInAscendingOrder=false;questionSort()">Sort questions in response sheet order</button>
         </div>
         <div>
             <p class="subject">Maths Question Analysis</p>

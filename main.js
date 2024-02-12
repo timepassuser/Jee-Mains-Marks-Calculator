@@ -23,6 +23,7 @@ function newParseAnswerKey() {
     return anskey
 }
 
+// s is the answer key as a string, copied from the final answer key pdf given by nta
 function pdfParseAnswerKey(s) {
     return s.split("\n").map(s => s.split(" ")).reduce((accumulator, current) => {
         accumulator[current[0]] = current[1];
@@ -46,9 +47,6 @@ function marksCalculator(responses, anskey) {
         "CBi": 0
     }
 
-    mathTable = document.getElementById("maths")
-    phyTable = document.getElementById("physics")
-    chemTable = document.getElementById("chem")
     subjectTables = {
         "MA": mathTable,
         "MB": mathTable,
@@ -144,7 +142,7 @@ Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
 }
 
 // Thanks to nta releasing new format of ans keys, now I have to modify the original marksCalculator to this. Thankfully only two lines need to be changed
-function newMarksCalculator(responses, anskey) {
+function newMarksCalculator(responses, anskey, responseSheetOrder) {
     console.log("newMarksCalculator is running")
     correctIncorrect = {
         "MAc": 0,
@@ -176,7 +174,7 @@ function newMarksCalculator(responses, anskey) {
     droppedInAnskey = 0;
     dropAwardedList = [];
 
-    for (let questionId of Object.keys(anskey).sort()) {
+    for (let questionId of (sortInAscendingOrder ? Object.keys(anskey).sort() : responseSheetOrder)) {
         option = anskey[questionId]
         if (option === "Drop") {
             droppedInAnskey += 1
@@ -248,7 +246,7 @@ function newMarksCalculator(responses, anskey) {
     chemBscore = correctIncorrect["CBc"] * 4 - correctIncorrect["CBi"]
     totalScore = mathAscore + mathBscore + phyAscore + phyBscore + chemAscore + chemBscore
     // console.log(mathAscore, mathBscore, phyAscore, phyBscore, chemAscore, chemBscore, totalScore)
-    marksElement = document.getElementById("marks")
+
     marksElement.innerText = `Your total score is ${totalScore}\nMath section A score is ${mathAscore}\nMath section B score is ${mathBscore}\nPhysics section A score is ${phyAscore}\nPhysics section B score is ${phyBscore}\nChem section A score is ${chemAscore}\nChem section B score is ${chemBscore}`
 
     resultString = `\n
@@ -304,7 +302,7 @@ function getAnskey(responsecontent) {
     }
 }
 
-function getResponses(responsecontent) {
+function getResponses(responsecontent, responseSheetOrder) {
     // var e = document.createElement("html");  // BAD method, don't ever use
     // e.innerHTML = responsecontent;
     // This is the correct way
@@ -327,7 +325,7 @@ function getResponses(responsecontent) {
         var questionIdRegex = /Question\s*ID\s*:\s*(\d+)/;
         var questionIdMatch = elementText.match(questionIdRegex);
         questionId = questionIdMatch[1];
-
+        responseSheetOrder.push(questionId)
         // console.log(elementText)
         if (elementText.includes("Not Answered") || elementText.includes("Not Attempted")) {
             if (elementText.includes("MCQ")) {
@@ -409,11 +407,12 @@ fileElement.onchange = () => {
         reader.onload = function(evt) {
             // console.log(evt.target.result);
             responsecontent = evt.target.result;
-            responses = getResponses(responsecontent)
-            // console.log(responses)
+            responseSheetOrder = []
+            responses = getResponses(responsecontent, responseSheetOrder)
+            // console.log(responseSheetOrder)
             anskey = getAnskey(responsecontent)
             // console.log(anskey)
-            newMarksCalculator(responses, anskey)
+            newMarksCalculator(responses, anskey, responseSheetOrder)
         }
         reader.onerror = function(evt) {
             console.log("error reading file");
@@ -421,4 +420,28 @@ fileElement.onchange = () => {
     } else {
         console.log("wtf")
     }
+}
+
+mathTable = document.getElementById("maths");
+phyTable = document.getElementById("physics");
+chemTable = document.getElementById("chem");
+
+marksElement = document.getElementById("marks");
+
+responses = null;
+anskey = null;
+responseSheetOrder = null;
+sortInAscendingOrder = true;
+
+function questionSort() {
+    scrollPos = {
+        x: window.scrollX,
+        y: window.scrollY
+    }
+    mathTable.innerHTML = "";
+    phyTable.innerHTML = "";
+    chemTable.innerHTML = "";
+    marksElement.innerHTML = "";
+    newMarksCalculator(responses, anskey, responseSheetOrder);
+    scroll(scrollPos.x, scrollPos.y)
 }
