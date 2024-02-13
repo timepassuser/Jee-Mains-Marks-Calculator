@@ -14,6 +14,11 @@
     <script src="main.js" defer></script>
     <script src="answerkeys.js"></script>
     <style>
+        body{
+            width: 80%;
+            margin: 2% auto 0px auto;
+        }
+
         .text {
             font-size: large;
         }
@@ -54,8 +59,9 @@
         }
 
         #marks {
-            /* width: 100%; */
-            text-align: center;
+            width: 70%;
+            text-align: left;
+            margin: 0px 40px 70px 0px ;
         }
 
         /* CSS */
@@ -92,6 +98,15 @@
             background-color: #f082ac;
         }
 
+        /* Common styling for all buttons */
+        button{
+            transition: transform 0.2s ease;
+        }
+
+        button:hover{
+            transform: translateY(-10px);
+        }
+
         .custom-container {
             flex-wrap: wrap;
             /* Allows children to wrap within the container */
@@ -116,13 +131,15 @@
         }
 
         .sortButton {
-            width: 50%;
+            width: 95%;
             border: 3px solid;
             border-color: rgb(240, 147, 147);
         }
 
         #buttonContainer {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            justify-items: center;
         }
     </style>
 </head>
@@ -142,13 +159,14 @@
             <input id="fileElement" type="file" />
         </div>
         <div>
-            <p id="marks"></p>
+            <ul id="marks"></ul>
         </div>
         <div id="buttonContainer">
             <button class="sortButton" id="sortByAscending" onclick="sortInAscendingOrder=true;questionSort()">Sort questions in ascending order</button>
             <button class="sortButton" id="sortByResponsesheet" onclick="sortInAscendingOrder=false;questionSort()">Sort questions in response sheet order</button>
+            <button class="sortButton" id="downloadResult" onclick="getResultPDF()">Download result as a PDF</button>
         </div>
-        <div>
+        <div id="result">
             <p class="subject">Maths Question Analysis</p>
             <table class="subjecttable" id="maths">
                 <tr>
