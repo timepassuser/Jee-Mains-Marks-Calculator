@@ -143,7 +143,7 @@ Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
 
 // Thanks to nta releasing new format of ans keys, now I have to modify the original marksCalculator to this. Thankfully only two lines need to be changed
 function newMarksCalculator(responses, anskey, responseSheetOrder) {
-    console.log("newMarksCalculator is running")
+    // console.log("newMarksCalculator is running")
     correctIncorrect = {
         "MAc": 0,
         "MBc": 0,
@@ -209,7 +209,7 @@ function newMarksCalculator(responses, anskey, responseSheetOrder) {
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Correct ✅"
                 } else {
-                    console.log("incorrect mcq ", responses[questionId][2], option)
+                    // console.log("incorrect mcq ", responses[questionId][2], option)
                     correctIncorrect[responses[questionId][1] + 'i'] += 1
                     row.insertCell().innerText = "Wrong ❌"
                 }
@@ -248,35 +248,35 @@ function newMarksCalculator(responses, anskey, responseSheetOrder) {
     // console.log(mathAscore, mathBscore, phyAscore, phyBscore, chemAscore, chemBscore, totalScore)
 
     resultStrings = [
-    `<strong>Your total score is ${totalScore}</strong>`,
-    `Total no. of questions attempted is ${totalAttempted} (No. of correct also includes dropped questions for which you received marks) <hr>`,
-    `<strong>Maths section A score is ${mathAscore}</strong>`,
-    `<strong>Maths section B score is ${mathBscore}</strong>`,
-    `Maths section A no. of correct is ${correctIncorrect["MAc"]}`,
-    `Maths section A no. of incorrect is ${correctIncorrect["MAi"]}`,
-    `Maths section B no. of correct is ${correctIncorrect["MBc"]}`,
-    `Maths section B no. of incorrect is ${correctIncorrect["MBi"]} <hr>`,
-    `<strong>Physics section A score is ${phyAscore}</strong>`,
-    `<strong>Physics section B score is ${phyBscore}</strong>`,
-    `Physics section A no. of correct is ${correctIncorrect["PAc"]}`,
-    `Physics section A no. of incorrect is ${correctIncorrect["PAi"]}`,
-    `Physics section B no. of correct is ${correctIncorrect["PBc"]}`,
-    `Physics section B no. of incorrect is ${correctIncorrect["PBi"]} <hr>`,
-    `<strong>Chemistry section A score is ${chemAscore}</strong>`,
-    `<strong>Chemistry section B score is ${chemBscore}</strong>`,
-    `Chemistry section A no. of correct is ${correctIncorrect["CAc"]}`,
-    `Chemistry section A no. of incorrect is ${correctIncorrect["CAi"]}`,
-    `Chemistry section B no. of correct is ${correctIncorrect["CBc"]}`,
-    `Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]} <hr>`,
-    `Total no. of questions dropped in your answer key was: <strong>${droppedInAnskey}</strong>`,
-    `You received marks for these dropped questions: <strong>${dropAwardedList.length === 0 ? "None" : String(dropAwardedList).replace(',', ", ")}</strong><hr> `
+        `<strong>Your total score is ${totalScore}</strong>`,
+        `Total no. of questions attempted is ${totalAttempted} (No. of correct also includes dropped questions for which you received marks) <hr>`,
+        `<strong>Maths section A score is ${mathAscore}</strong>`,
+        `<strong>Maths section B score is ${mathBscore}</strong>`,
+        `Maths section A no. of correct is ${correctIncorrect["MAc"]}`,
+        `Maths section A no. of incorrect is ${correctIncorrect["MAi"]}`,
+        `Maths section B no. of correct is ${correctIncorrect["MBc"]}`,
+        `Maths section B no. of incorrect is ${correctIncorrect["MBi"]} <hr>`,
+        `<strong>Physics section A score is ${phyAscore}</strong>`,
+        `<strong>Physics section B score is ${phyBscore}</strong>`,
+        `Physics section A no. of correct is ${correctIncorrect["PAc"]}`,
+        `Physics section A no. of incorrect is ${correctIncorrect["PAi"]}`,
+        `Physics section B no. of correct is ${correctIncorrect["PBc"]}`,
+        `Physics section B no. of incorrect is ${correctIncorrect["PBi"]} <hr>`,
+        `<strong>Chemistry section A score is ${chemAscore}</strong>`,
+        `<strong>Chemistry section B score is ${chemBscore}</strong>`,
+        `Chemistry section A no. of correct is ${correctIncorrect["CAc"]}`,
+        `Chemistry section A no. of incorrect is ${correctIncorrect["CAi"]}`,
+        `Chemistry section B no. of correct is ${correctIncorrect["CBc"]}`,
+        `Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]} <hr>`,
+        `Total no. of questions dropped in your answer key was: <strong>${droppedInAnskey}</strong>`,
+        `You received marks for these dropped questions: <strong>${dropAwardedList.length === 0 ? "None" : String(dropAwardedList).replace(',', ", ")}</strong><hr> `
     ];
 
-    for (i=0; i < resultStrings.length; i++){
+    for (i = 0; i < resultStrings.length; i++) {
         list_element = document.createElement("li");
         list_element.innerHTML = resultStrings[i];
         marksElement.append(list_element);
-        console.log(i)
+        // console.log(i)
     };
 
 }
@@ -447,22 +447,23 @@ function questionSort() {
         x: window.scrollX,
         y: window.scrollY
     }
-    mathTable.innerHTML = "";
-    phyTable.innerHTML = "";
-    chemTable.innerHTML = "";
+    mathTable.innerHTML = mathTable.rows[0].innerHTML;
+    phyTable.innerHTML = phyTable.rows[0].innerHTML;
+    chemTable.innerHTML = chemTable.rows[0].innerHTML;
     marksElement.innerHTML = "";
     newMarksCalculator(responses, anskey, responseSheetOrder);
     scroll(scrollPos.x, scrollPos.y)
 }
 
 function getResultPDF() {
-    var divContents = document.getElementById("result").innerHTML;
+    var marksContents = document.getElementById("marks").innerHTML;
+    var resultContents = document.getElementById("result").innerHTML;
     var printWindow = window.open('', '', 'height=400,width=800');
     printWindow.document.write('<html><head><title>Answers</title>');
     printWindow.document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />');
     printWindow.document.write('</head><body style="padding: 50px;">');
     printWindow.document.write('<style>.subject{font-weight:700;font-size:larger;text-align:center}.subjecttable{width:100%}td,th{border:1px solid}tr:nth-child(2n){background-color:#f6f6f6}tr:nth-child(odd){background-color:#f2f2f2}</style>');
-    printWindow.document.write(divContents);
+    printWindow.document.write(marksContents + resultContents);
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.print();
