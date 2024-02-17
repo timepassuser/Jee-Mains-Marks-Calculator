@@ -222,7 +222,7 @@ function newMarksCalculator(responses, anskey, responseSheetOrder) {
                     dropAwardedList.push(questionId)
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Attempted and Dropped"
-                } else if (parseInt(responses[questionId][2]) === parseInt(option)) { //correct
+                } else if (parseFloat(responses[questionId][2]) === parseFloat(option)) { //correct
                     correctIncorrect[responses[questionId][1] + 'c'] += 1
                     row.insertCell().innerText = "Correct ✅"
                 } else {
