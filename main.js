@@ -404,7 +404,7 @@ function getResponses(responsecontent, responseSheetOrder) {
 
 
 fileElement = document.getElementById("fileElement")
-fileURLElement = document.getElementById("fileURL")
+// fileURLElement = document.getElementById("fileURL")
 // button = document.getElementById("button")
 // urlErrorElement = document.getElementById("urlError")
 responsecontent = null;
