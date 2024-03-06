@@ -281,7 +281,6 @@ function newMarksCalculator(responses, anskey, responseSheetOrder) {
 
 }
 
-
 function getAnskey(responsecontent) {
     // var e = document.createElement("html");  // BAD method, don't ever use
     // e.innerHTML = responsecontent;
@@ -404,14 +403,12 @@ function getResponses(responsecontent, responseSheetOrder) {
 
 
 fileElement = document.getElementById("fileElement")
-// fileURLElement = document.getElementById("fileURL")
-// button = document.getElementById("button")
-// urlErrorElement = document.getElementById("urlError")
+fileURLElement = document.getElementById("fileURL")
+button = document.getElementById("button")
+urlErrorElement = document.getElementById("urlError")
 responsecontent = null;
 fileElement.onchange = () => {
-    // console.log(responsesheet)
     responsesheet = fileElement.files[0];
-    // console.log(responsesheet)
     if (responsesheet) {
         // console.log(responsesheet)
         var reader = new FileReader();
@@ -468,62 +465,61 @@ function getResultPDF() {
 };
 
 // fetches response sheet through proxy
-// async function fetchResponseSheet() {
-//     url = fileURLElement.value;
-//     if (url.indexOf("http://") !== -1) {
-//         urlErrorElement.style.display = "block";
-//         urlErrorElement.innerText = "Invalid url. Url must be https, not http";
-//         console.log("invalid url", console.log(href))
-//         return false;
-//     }
-//     if (url.indexOf("https://") === -1) {
-//         url = "https://" + url
-//     }
-//     // will only send the request if url is of cdn3.digialm.com and ends with .html to prevent fetching of other websites using the proxy.
-//     if (url.indexOf("cdn3.digialm.com") === -1) {
-//         urlErrorElement.style.display = "block";
-//         urlErrorElement.innerText = "Invalid url. Url can only be of cdn3.digialm.com";
-//         console.log("invalid url", console.log(href))
-//         return false;
-//     }
-//     if (url.indexOf(".html") === -1) {
-//         urlErrorElement.style.display = "block";
-//         urlErrorElement.innerText = "Invalid url. The url doesn't contain .html";
-//         return false;
-//     }
+async function fetchResponseSheet() {
+    url = fileURLElement.value;
+    if (url.indexOf("http://") !== -1) {
+        urlErrorElement.style.display = "block";
+        urlErrorElement.innerText = "Invalid url. Url must be https, not http";
+        // console.log("invalid url", console.log(href))
+        return false;
+    }
 
-//     //validating the url
-//     href = null;
-//     try {
-//         urlObject = new URL(url);
-//         href = urlObject.href;
-//         urlErrorElement.style.display = "none";
-//         console.log(href)
-//     } catch (err) {
-//         urlErrorElement.style.display = "block";
-//         urlErrorElement.innerText = "Invalid url";
-//         console.log("invalid url", console.log(href))
-//         return false;
-//     }
+    // will only send the request if url is of cdn3.digialm.com and ends with .html to prevent fetching of other websites using the proxy.
+    if (url.indexOf("cdn3.digialm.com") === -1) {
+        urlErrorElement.style.display = "block";
+        urlErrorElement.innerText = "Invalid url. Url can only be of cdn3.digialm.com";
+        // console.log("invalid url", console.log(href))
+        return false;
+    }
+    if (url.indexOf(".html") === -1) {
+        urlErrorElement.style.display = "block";
+        urlErrorElement.innerText = "Invalid url. The url doesn't contain .html";
+        return false;
+    }
 
-//     // get response sheet using the proxy
-//     try {
-//         response = await fetch(`${proxy}${href}`, {
-//             headers: {
-//                 "corsproxy": "corsproxy"
-//             }
-//         });
-//         if (!response.ok) {
-//             throw new Error('Network error');
-//         }
-//         // console.log(response);
-//         responsecontent = await response.text();
-//         console.log(responsecontent)
-//         main(responsecontent)
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
+    //validating the url
+    href = null;
+    try {
+        urlObject = new URL(url);
+        href = urlObject.href;
+        urlErrorElement.style.display = "none";
+        // console.log(href)
+    } catch (err) {
+        urlErrorElement.style.display = "block";
+        urlErrorElement.innerText = "Invalid url";
+        console.log("invalid url", console.log(href))
+        return false;
+    }
+
+    // get response sheet using the proxy
+    try {
+        response = await fetch(`${proxy}`, {
+            headers: {
+                "corsproxy": "corsproxy",
+                "urltofetch": href
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network error');
+        }
+        // console.log(response);
+        responsecontent = await response.text();
+        // console.log(responsecontent)
+        main(responsecontent)
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 function main(responsecontent) {
     responseSheetOrder = []
