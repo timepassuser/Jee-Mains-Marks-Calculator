@@ -360,14 +360,6 @@ function getResponses(responsecontent, responseSheetOrder) {
                 var option4IdRegex = /Option\s*4\s*ID\s*:\s*(\d+)/;
                 var chosenOptionRegex = /Chosen\s*Option\s*:\s*(\d+)/;
 
-                // var questionIdRegex = /Question\s*ID\s*:\s*(\d+)/;
-                // var option1IdRegex = /Option\s*1\s*ID\s*:\s*(\d+)/;
-                // var option2IdRegex = /Option\s*2\s*ID\s*:\s*(\d+)/;
-                // var option3IdRegex = /Option\s*3\s*ID\s*:\s*(\d+)/;
-                // var option4IdRegex = /Option\s*4\s*ID\s*:\s*(\d+)/;
-                // var chosenOptionRegex = /Chosen\s*Option\s*:\s*(\d+)/;
-
-
                 var option1IdMatch = elementText.match(option1IdRegex);
                 var option2IdMatch = elementText.match(option2IdRegex);
                 var option3IdMatch = elementText.match(option3IdRegex);
@@ -470,7 +462,6 @@ async function fetchResponseSheet() {
     if (url.indexOf("http://") !== -1) {
         urlErrorElement.style.display = "block";
         urlErrorElement.innerText = "Invalid url. Url must be https, not http";
-        // console.log("invalid url", console.log(href))
         return false;
     }
 
@@ -478,7 +469,6 @@ async function fetchResponseSheet() {
     if (url.indexOf("cdn3.digialm.com") === -1) {
         urlErrorElement.style.display = "block";
         urlErrorElement.innerText = "Invalid url. Url can only be of cdn3.digialm.com";
-        // console.log("invalid url", console.log(href))
         return false;
     }
     if (url.indexOf(".html") === -1) {
@@ -493,7 +483,6 @@ async function fetchResponseSheet() {
         urlObject = new URL(url);
         href = urlObject.href;
         urlErrorElement.style.display = "none";
-        // console.log(href)
     } catch (err) {
         urlErrorElement.style.display = "block";
         urlErrorElement.innerText = "Invalid url";
@@ -501,24 +490,31 @@ async function fetchResponseSheet() {
         return false;
     }
 
-    // get response sheet using the proxy
-    try {
-        response = await fetch(`${proxy}`, {
-            headers: {
-                "corsproxy": "corsproxy",
-                "urltofetch": href
+    responsecontent = localStorage.getItem(href)
+    if (responsecontent === null) {
+
+        // get response sheet using the proxy
+        try {
+            response = await fetch(`${proxy}`, {
+                headers: {
+                    "corsproxy": "corsproxy",
+                    "urltofetch": href
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network error');
+                return false;
             }
-        });
-        if (!response.ok) {
-            throw new Error('Network error');
+            // console.log(response);
+            responsecontent = await response.text();
+            if (responsecontent.includes("<html>"))
+                localStorage.setItem(href, responsecontent);
+        } catch (error) {
+            console.error(error);
+            return false;
         }
-        // console.log(response);
-        responsecontent = await response.text();
-        // console.log(responsecontent)
-        main(responsecontent)
-    } catch (error) {
-        console.error(error);
     }
+    return responsecontent;
 }
 
 function main(responsecontent) {
@@ -526,4 +522,31 @@ function main(responsecontent) {
     responses = getResponses(responsecontent, responseSheetOrder)
     anskey = getAnskey(responsecontent)
     newMarksCalculator(responses, anskey, responseSheetOrder)
+}
+
+function fetchSheetAndCalculate() {
+    responsecontentPromise = fetchResponseSheet();
+    responsecontentPromise.then((responsecontent) => {
+        if (responsecontent) {
+            main(responsecontent);
+        }
+    })
+}
+
+function downloadResponseSheet() {
+    responsecontentPromise = fetchResponseSheet();
+    responsecontentPromise.then((responsecontent) => {
+        if (responsecontent) {
+            url = URL.createObjectURL(new Blob([responsecontent], {
+                type: "text/html"
+            }))
+            atag = document.createElement("a");
+            atag.style.display = "none";
+            atag.setAttribute("download", "JeeMain2024ResponseSheet.html");
+            atag.href = url;
+            atag.click();
+        } else {
+            console.log("Promise is", responsecontentPromise)
+        }
+    })
 }
