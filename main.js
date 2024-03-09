@@ -504,6 +504,9 @@ async function fetchResponseSheet() {
             });
             if (!response.ok) {
                 throw new Error('Network error');
+                document.getElementById("loader").style.display = "none";
+                urlErrorElement.stle.display = "block";
+                urlErrorElement.innerText = "Network Error";
                 return false;
             }
             // console.log(response);
@@ -513,6 +516,9 @@ async function fetchResponseSheet() {
                 localStorage.setItem(href, responsecontent);
         } catch (error) {
             console.error(error);
+            document.getElementById("loader").style.display = "none";
+            urlErrorElement.style.display = "block";
+            urlErrorElement.innerText = `Some Error Occured, ${error} Check console`;
             return false;
         }
     }
