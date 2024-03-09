@@ -495,6 +495,7 @@ async function fetchResponseSheet() {
 
         // get response sheet using the proxy
         try {
+            document.getElementById("loader").style.display = "block";
             response = await fetch(`${proxy}`, {
                 headers: {
                     "corsproxy": "corsproxy",
@@ -507,6 +508,7 @@ async function fetchResponseSheet() {
             }
             // console.log(response);
             responsecontent = await response.text();
+            document.getElementById("loader").style.display = "none";
             if (responsecontent.includes("<html>"))
                 localStorage.setItem(href, responsecontent);
         } catch (error) {
