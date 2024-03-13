@@ -31,118 +31,118 @@ function pdfParseAnswerKey(s) {
     }, {})
 }
 
-function marksCalculator(responses, anskey) {
-    correctIncorrect = {
-        "MAc": 0,
-        "MBc": 0,
-        "PAc": 0,
-        "PBc": 0,
-        "CAc": 0,
-        "CBc": 0,
-        "MAi": 0,
-        "MBi": 0,
-        "PAi": 0,
-        "PBi": 0,
-        "CAi": 0,
-        "CBi": 0
-    }
+// Legacy code i guess..
+// function marksCalculator(responses, anskey) {
+//     correctIncorrect = {
+//         "MAc": 0,
+//         "MBc": 0,
+//         "PAc": 0,
+//         "PBc": 0,
+//         "CAc": 0,
+//         "CBc": 0,
+//         "MAi": 0,
+//         "MBi": 0,
+//         "PAi": 0,
+//         "PBi": 0,
+//         "CAi": 0,
+//         "CBi": 0
+//     }
 
-    subjectTables = {
-        "MA": mathTable,
-        "MB": mathTable,
-        "PA": phyTable,
-        "PB": phyTable,
-        "CA": chemTable,
-        "CB": chemTable
-    }
-    totalAttempted = 0
+//     subjectTables = {
+//         "MA": mathTable,
+//         "MB": mathTable,
+//         "PA": phyTable,
+//         "PB": phyTable,
+//         "CA": chemTable,
+//         "CB": chemTable
+//     }
+//     totalAttempted = 0
 
-    for (let questionId of Object.keys(anskey).sort()) {
-        option = anskey[questionId]
-        subjectTable = subjectTables[responses[questionId][1]]
-        row = subjectTable.insertRow()
-        row.insertCell().innerText = questionId
-        // console.log(responses[questionId])
-        if (responses[questionId]) {
-            // console.log(responses[questionId])
-            if (responses[questionId][0] === "NA") {
-                // console.log("Not attempted", responses[questionId])
-                row.insertCell().innerText = responses[questionId][2] // type of question
-                row.insertCell().innerText = "Not Attempted"
-                row.insertCell().innerText = "NA"
-                if (responses[questionId][2] === "MCQ") {
-                    row.insertCell().innerText = responses[questionId][3][option - 1];
-                } else {
-                    row.insertCell().innerText = option;
-                }
-            } else if (responses[questionId][0] === "MCQ") {
-                totalAttempted += 1
-                // console.log(responses[questionId][2], responses[questionId][3], option)
-                if (responses[questionId][2] === responses[questionId][3][option - 1]) { //correct
-                    // console.log("CORRECT MCQ")
-                    correctIncorrect[responses[questionId][1] + 'c'] += 1
-                    row.insertCell().innerText = "MCQ"
-                    row.insertCell().innerText = "Correct ✅"
-                } else {
-                    // console.log("incorrect mcq ", responses[questionId])
-                    correctIncorrect[responses[questionId][1] + 'i'] += 1
-                    row.insertCell().innerText = "MCQ"
-                    row.insertCell().innerText = "Wrong ❌"
-                }
-                row.insertCell().innerText = responses[questionId][2]
-                row.insertCell().innerText = responses[questionId][3][option - 1]
+//     for (let questionId of Object.keys(anskey).sort()) {
+//         option = anskey[questionId]
+//         subjectTable = subjectTables[responses[questionId][1]]
+//         row = subjectTable.insertRow()
+//         row.insertCell().innerText = questionId
+//         // console.log(responses[questionId])
+//         if (responses[questionId]) {
+//             // console.log(responses[questionId])
+//             if (responses[questionId][0] === "NA") {
+//                 // console.log("Not attempted", responses[questionId])
+//                 row.insertCell().innerText = responses[questionId][2] // type of question
+//                 row.insertCell().innerText = "Not Attempted"
+//                 row.insertCell().innerText = "NA"
+//                 if (responses[questionId][2] === "MCQ") {
+//                     row.insertCell().innerText = responses[questionId][3][option - 1];
+//                 } else {
+//                     row.insertCell().innerText = option;
+//                 }
+//             } else if (responses[questionId][0] === "MCQ") {
+//                 totalAttempted += 1
+//                 // console.log(responses[questionId][2], responses[questionId][3], option)
+//                 if (responses[questionId][2] === responses[questionId][3][option - 1]) { //correct
+//                     // console.log("CORRECT MCQ")
+//                     correctIncorrect[responses[questionId][1] + 'c'] += 1
+//                     row.insertCell().innerText = "MCQ"
+//                     row.insertCell().innerText = "Correct ✅"
+//                 } else {
+//                     // console.log("incorrect mcq ", responses[questionId])
+//                     correctIncorrect[responses[questionId][1] + 'i'] += 1
+//                     row.insertCell().innerText = "MCQ"
+//                     row.insertCell().innerText = "Wrong ❌"
+//                 }
+//                 row.insertCell().innerText = responses[questionId][2]
+//                 row.insertCell().innerText = responses[questionId][3][option - 1]
 
-            } else if (responses[questionId][0] === "SA") {
-                totalAttempted += 1
-                if (parseInt(responses[questionId][2]) === option) { //correct
-                    correctIncorrect[responses[questionId][1] + 'c'] += 1
-                    row.insertCell().innerText = "SA"
-                    row.insertCell().innerText = "Correct ✅"
-                } else {
-                    // console.log(typeof(responses[questionId][2]), typeof(option))
-                    correctIncorrect[responses[questionId][1] + 'i'] += 1
-                    row.insertCell().innerText = "SA"
-                    row.insertCell().innerText = "Wrong ❌"
-                }
-                row.insertCell().innerText = responses[questionId][2];
-                row.insertCell().innerText = option;
-            }
-        } else {
-            console.log("WTF")
-        }
-    }
-    // console.log(correctIncorrect)
-    mathAscore = correctIncorrect["MAc"] * 4 - correctIncorrect["MAi"]
-    mathBscore = correctIncorrect["MBc"] * 4 - correctIncorrect["MBi"]
-    phyAscore = correctIncorrect["PAc"] * 4 - correctIncorrect["PAi"]
-    phyBscore = correctIncorrect["PBc"] * 4 - correctIncorrect["PBi"]
-    chemAscore = correctIncorrect["CAc"] * 4 - correctIncorrect["CAi"]
-    chemBscore = correctIncorrect["CBc"] * 4 - correctIncorrect["CBi"]
-    totalScore = mathAscore + mathBscore + phyAscore + phyBscore + chemAscore + chemBscore
-    // console.log(mathAscore, mathBscore, phyAscore, phyBscore, chemAscore, chemBscore, totalScore)
-    marksElement = document.getElementById("marks")
-    marksElement.innerText = `Your total score is ${totalScore}\nMath section A score is ${mathAscore}\nMath section B score is ${mathBscore}\nPhysics section A score is ${phyAscore}\nPhysics section B score is ${phyBscore}\nChem section A score is ${chemAscore}\nChem section B score is ${chemBscore}`
+//             } else if (responses[questionId][0] === "SA") {
+//                 totalAttempted += 1
+//                 if (parseInt(responses[questionId][2]) === option) { //correct
+//                     correctIncorrect[responses[questionId][1] + 'c'] += 1
+//                     row.insertCell().innerText = "SA"
+//                     row.insertCell().innerText = "Correct ✅"
+//                 } else {
+//                     // console.log(typeof(responses[questionId][2]), typeof(option))
+//                     correctIncorrect[responses[questionId][1] + 'i'] += 1
+//                     row.insertCell().innerText = "SA"
+//                     row.insertCell().innerText = "Wrong ❌"
+//                 }
+//                 row.insertCell().innerText = responses[questionId][2];
+//                 row.insertCell().innerText = option;
+//             }
+//         } else {
+//             console.log("WTF")
+//         }
+//     }
+//     // console.log(correctIncorrect)
+//     mathAscore = correctIncorrect["MAc"] * 4 - correctIncorrect["MAi"]
+//     mathBscore = correctIncorrect["MBc"] * 4 - correctIncorrect["MBi"]
+//     phyAscore = correctIncorrect["PAc"] * 4 - correctIncorrect["PAi"]
+//     phyBscore = correctIncorrect["PBc"] * 4 - correctIncorrect["PBi"]
+//     chemAscore = correctIncorrect["CAc"] * 4 - correctIncorrect["CAi"]
+//     chemBscore = correctIncorrect["CBc"] * 4 - correctIncorrect["CBi"]
+//     totalScore = mathAscore + mathBscore + phyAscore + phyBscore + chemAscore + chemBscore
+//     // console.log(mathAscore, mathBscore, phyAscore, phyBscore, chemAscore, chemBscore, totalScore)
+//     marksElement = document.getElementById("marks")
+//     marksElement.innerText = `Your total score is ${totalScore}\nMath section A score is ${mathAscore}\nMath section B score is ${mathBscore}\nPhysics section A score is ${phyAscore}\nPhysics section B score is ${phyBscore}\nChem section A score is ${chemAscore}\nChem section B score is ${chemBscore}`
 
-    resultString = `\n
-Total no. of questions attempted is ${totalAttempted}
-Maths section A no. of correct is ${correctIncorrect["MAc"]}
-Maths section A no. of incorrect is ${correctIncorrect["MAi"]}
-Maths section B no. of correct is ${correctIncorrect["MBc"]}
-Maths section B no. of incorrect is ${correctIncorrect["MBi"]}
-Physics section A no. of correct is ${correctIncorrect["PAc"]}
-Physics section A no. of incorrect is ${correctIncorrect["PAi"]}
-Physics section B no. of correct is ${correctIncorrect["PBc"]}
-Physics section B no. of incorrect is ${correctIncorrect["PBi"]}
-Chemistry section A no. of correct is ${correctIncorrect["CAc"]}
-Chemistry section A no. of incorrect is ${correctIncorrect["CAi"]}
-Chemistry section B no. of correct is ${correctIncorrect["CBc"]}
-Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
-`;
-    marksElement.innerText += resultString;
-}
+//     resultString = `\n
+// Total no. of questions attempted is ${totalAttempted}
+// Maths section A no. of correct is ${correctIncorrect["MAc"]}
+// Maths section A no. of incorrect is ${correctIncorrect["MAi"]}
+// Maths section B no. of correct is ${correctIncorrect["MBc"]}
+// Maths section B no. of incorrect is ${correctIncorrect["MBi"]}
+// Physics section A no. of correct is ${correctIncorrect["PAc"]}
+// Physics section A no. of incorrect is ${correctIncorrect["PAi"]}
+// Physics section B no. of correct is ${correctIncorrect["PBc"]}
+// Physics section B no. of incorrect is ${correctIncorrect["PBi"]}
+// Chemistry section A no. of correct is ${correctIncorrect["CAc"]}
+// Chemistry section A no. of incorrect is ${correctIncorrect["CAi"]}
+// Chemistry section B no. of correct is ${correctIncorrect["CBc"]}
+// Chemistry section B no. of incorrect is ${correctIncorrect["CBi"]}
+// `;
+//     marksElement.innerText += resultString;
+// }
 
-// Thanks to nta releasing new format of ans keys, now I have to modify the original marksCalculator to this. Thankfully only two lines need to be changed
-function newMarksCalculator(responses, anskey, responseSheetOrder) {
+function newMarksCalculator(responses, anskey, responseSheetOrder, images) {
     // console.log("newMarksCalculator is running")
     correctIncorrect = {
         "MAc": 0,
@@ -233,6 +233,13 @@ function newMarksCalculator(responses, anskey, responseSheetOrder) {
                 row.insertCell().innerText = responses[questionId][2]
             }
             row.insertCell().innerText = option;
+            if (fetchedFromUrl) {
+                imageContainer = document.createElement("div");
+                imageContainer.setAttribute("class", "imageContainer");
+                imageContainer.appendChild((images[questionId].setAttribute("class", "questionImage"), images[questionId]));
+                imageContainer.setAttribute("onclick", "imageContainerClick(this)")
+                row.insertCell().appendChild(imageContainer);
+            }
         } else {
             console.log("WTF")
         }
@@ -310,13 +317,15 @@ function getAnskey(responsecontent) {
     }
 }
 
-function getResponses(responsecontent, responseSheetOrder) {
+// gets responses and responseSheetOrder and images
+function getResponses(responsecontent, responseSheetOrder, images) {
     // var e = document.createElement("html");  // BAD method, don't ever use
     // e.innerHTML = responsecontent;
     // This is the correct way
-    parser = new DOMParser()
-    e = parser.parseFromString(responsecontent, "text/html")
+    parser = new DOMParser();
+    e = parser.parseFromString(responsecontent, "text/html");
     menutbls = e.getElementsByClassName("menu-tbl");
+
     responses = {};
     for (let i = 0; i < menutbls.length; i++) {
         sectionText = menutbls[i].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.children[0].textContent
@@ -334,7 +343,15 @@ function getResponses(responsecontent, responseSheetOrder) {
         var questionIdMatch = elementText.match(questionIdRegex);
         questionId = questionIdMatch[1];
         responseSheetOrder.push(questionId)
-        // console.log(elementText)
+
+        // get images
+        if (fetchedFromUrl) {
+            questionRowTbl = menutbls[i].parentElement.children[0]
+            image = questionRowTbl.children[0].children[1].children[1].children[0];
+            image.src = "https://cdn3.digialm.com" + image.getAttribute("src");
+            images[questionId] = image;
+        }
+
         if (elementText.includes("Not Answered") || elementText.includes("Not Attempted")) {
             if (elementText.includes("MCQ")) {
                 var option1IdRegex = /Option\s*1\s*ID\s*:\s*(\d+)/;
@@ -385,20 +402,19 @@ function getResponses(responsecontent, responseSheetOrder) {
 
             }
         }
-
-
-        // responses[questionId] = [optionIdValue, optionIds]
-        // console.log("hi", responses)
     }
     return responses
 }
-
 
 fileElement = document.getElementById("fileElement")
 fileURLElement = document.getElementById("fileURL")
 button = document.getElementById("button")
 urlErrorElement = document.getElementById("urlError")
+imageModal = document.getElementById("imageModal");
+modalArticle = document.getElementById("modalArticle");
 responsecontent = null;
+fetchedFromUrl = false;
+showQuestions = false;
 fileElement.onchange = () => {
     responsesheet = fileElement.files[0];
     if (responsesheet) {
@@ -427,6 +443,7 @@ marksElement = document.getElementById("marks");
 responses = null;
 anskey = null;
 responseSheetOrder = null;
+images = null;
 sortInAscendingOrder = true;
 
 function questionSort() {
@@ -438,7 +455,7 @@ function questionSort() {
     phyTable.innerHTML = phyTable.rows[0].innerHTML;
     chemTable.innerHTML = chemTable.rows[0].innerHTML;
     marksElement.innerHTML = "";
-    newMarksCalculator(responses, anskey, responseSheetOrder);
+    newMarksCalculator(responses, anskey, responseSheetOrder, images);
     scroll(scrollPos.x, scrollPos.y)
 }
 
@@ -512,8 +529,10 @@ async function fetchResponseSheet() {
             // console.log(response);
             responsecontent = await response.text();
             document.getElementById("loader").style.display = "none";
-            if (responsecontent.includes("<html>"))
+            if (responsecontent.includes("<html>")) {
+                fetchedFromUrl = true;
                 localStorage.setItem(href, responsecontent);
+            }
         } catch (error) {
             console.error(error);
             document.getElementById("loader").style.display = "none";
@@ -521,15 +540,24 @@ async function fetchResponseSheet() {
             urlErrorElement.innerText = `Some Error Occured, ${error} Check console`;
             return false;
         }
+    } else {
+        fetchedFromUrl = true;
     }
     return responsecontent;
 }
 
 function main(responsecontent) {
-    responseSheetOrder = []
-    responses = getResponses(responsecontent, responseSheetOrder)
-    anskey = getAnskey(responsecontent)
-    newMarksCalculator(responses, anskey, responseSheetOrder)
+    responseSheetOrder = [];
+    images = {};
+    responses = getResponses(responsecontent, responseSheetOrder, images);
+    anskey = getAnskey(responsecontent);
+    if (fetchedFromUrl) {
+        showQuestions = true;
+        mathTable.rows[0].insertCell().innerText = "Question";
+        phyTable.rows[0].insertCell().innerText = "Question";
+        chemTable.rows[0].insertCell().innerText = "Question";
+    }
+    newMarksCalculator(responses, anskey, responseSheetOrder, images);
 }
 
 function fetchSheetAndCalculate() {
@@ -557,4 +585,16 @@ function downloadResponseSheet() {
             console.log("Promise is", responsecontentPromise)
         }
     })
+}
+
+function imageContainerClick(element) {
+    imageModal.style.display = "flex";
+    imageClone = element.children[0].cloneNode(true)
+    imageClone.style.margin = "5px";
+    modalArticle.appendChild(imageClone);
+}
+
+function closeModal() {
+    modalArticle.removeChild(modalArticle.children[modalArticle.childElementCount - 1])
+    imageModal.style.display = "none";
 }

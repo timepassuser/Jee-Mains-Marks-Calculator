@@ -146,6 +146,10 @@
             background-color: #b83567;
         }
 
+        #imageModal {
+            display: none;
+        }
+
         /* Loading animation */
         .animationContainer {
             /* height: 100vh; */
@@ -256,6 +260,14 @@
         <div>
             <ul id="marks"></ul>
         </div>
+
+        <dialog id="imageModal" open>
+            <article id="modalArticle">
+                <button onclick="closeModal()" aria-label="Close" rel="prev">Close Image</button>
+                <hr>
+            </article>
+        </dialog>
+
         <div id="buttonContainer">
             <button class="sortButton" id="sortByAscending" onclick="sortInAscendingOrder=true;questionSort()">Sort questions in ascending order</button>
             <button class="sortButton" id="sortByResponsesheet" onclick="sortInAscendingOrder=false;questionSort()">Sort questions in response sheet order</button>
@@ -270,6 +282,7 @@
                     <th>Status</th>
                     <th>Selected OptionId/Integer Answer</th>
                     <th>Correct OptionId/Integer Answer</th>
+                    <!-- //<th>Question</th> -->
                 </tr>
             </table>
             <p class="subject">Physics Question Analysis</p>
@@ -280,6 +293,7 @@
                     <th>Status</th>
                     <th>Selected OptionId/Integer Answer</th>
                     <th>Correct OptionId/Integer Answer</th>
+                    <!-- <th>Question</th> -->
                 </tr>
             </table>
             <p class="subject">Chemistry Question Analysis</p>
@@ -290,6 +304,7 @@
                     <th>Status</th>
                     <th>Selected OptionId/Integer Answer</th>
                     <th>Correct OptionId/Integer Answer</th>
+                    <!-- <th>Question</th> -->
                 </tr>
             </table>
         </div>
