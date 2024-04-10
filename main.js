@@ -142,7 +142,7 @@ function pdfParseAnswerKey(s) {
 //     marksElement.innerText += resultString;
 // }
 
-function newMarksCalculator(responses, anskey, responseSheetOrder, images) {
+function newMarksCalculator(responses, anskey, responseSheetOrder, questionImages, answerImages) {
     // console.log("newMarksCalculator is running")
     correctIncorrect = {
         "MAc": 0,
@@ -179,66 +179,78 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, images) {
         if (option === "Drop") {
             droppedInAnskey += 1
         }
-        subjectTable = subjectTables[responses[questionId][1]]
+        subjectTable = subjectTables[responses[questionId].section]
         row = subjectTable.insertRow()
         row.insertCell().innerText = questionId
-        // console.log(responses[questionId])
         if (responses[questionId]) {
-            // console.log(responses[questionId])
-            if (responses[questionId][0] === "NA") {
+            if (!responses[questionId].attempted) { // Not attempted
                 // console.log("Not attempted", responses[questionId])
-                row.insertCell().innerText = responses[questionId][2] // type of question
-                if (option === "Drop" && responses[questionId][2] === "MCQ") {
+                row.insertCell().innerText = responses[questionId].type // type of question
+                if (option === "Drop" && responses[questionId].type === "MCQ") {
                     dropAwardedList.push(questionId)
-                    correctIncorrect[responses[questionId][1] + 'c'] += 1
+                    correctIncorrect[responses[questionId].section + 'c'] += 1
                     row.insertCell().innerText = "Not Attempted and Dropped";
                 } else {
                     row.insertCell().innerText = "Not Attempted";
                 }
-                row.insertCell().innerText = "NA"
-            } else if (responses[questionId][0] === "MCQ") {
-                totalAttempted += 1
-                row.insertCell().innerText = "MCQ"
-                // console.log(responses[questionId][2], responses[questionId][3], option)
-                if (option === "Drop") {
-                    dropAwardedList.push(questionId)
-                    correctIncorrect[responses[questionId][1] + 'c'] += 1
-                    row.insertCell().innerText = "Attempted and Dropped";
-                } else if (responses[questionId][2] === option || (responses[questionId][2] === option.split(',')[1] || responses[questionId][2] === option.split(',')[0])) { //correct
-                    // console.log("CORRECT MCQ")
-                    correctIncorrect[responses[questionId][1] + 'c'] += 1
-                    row.insertCell().innerText = "Correct ✅"
-                } else {
-                    // console.log("incorrect mcq ", responses[questionId][2], option)
-                    correctIncorrect[responses[questionId][1] + 'i'] += 1
-                    row.insertCell().innerText = "Wrong ❌"
-                }
-                row.insertCell().innerText = responses[questionId][2]
+                row.insertCell().innerText = "NA";
+            } else { // Attempted
+                if (responses[questionId].type === "MCQ") {
+                    totalAttempted += 1;
+                    row.insertCell().innerText = "MCQ";
+                    // console.log(responses[questionId][2], responses[questionId][3], option)
+                    if (option === "Drop") {
+                        dropAwardedList.push(questionId);
+                        correctIncorrect[responses[questionId].section + 'c'] += 1;
+                        row.insertCell().innerText = "Attempted and Dropped";
+                    } else if (responses[questionId].chosenOptionId === option || (responses[questionId].chosenOptionId === option.split(',')[1] || responses[questionId].chosenOptionId === option.split(',')[0])) { //correct
+                        // console.log("CORRECT MCQ")
+                        correctIncorrect[responses[questionId].section + 'c'] += 1;
+                        row.insertCell().innerText = "Correct ✅";
+                    } else {
+                        // console.log("incorrect mcq ", responses[questionId][2], option)
+                        correctIncorrect[responses[questionId].section + 'i'] += 1;
+                        row.insertCell().innerText = "Wrong ❌";
+                    }
+                    row.insertCell().innerText = responses[questionId].chosenOptionId;
 
-            } else if (responses[questionId][0] === "SA") {
-                totalAttempted += 1
-                row.insertCell().innerText = "SA"
-                if (option === "Drop") {
-                    dropAwardedList.push(questionId)
-                    correctIncorrect[responses[questionId][1] + 'c'] += 1
-                    row.insertCell().innerText = "Attempted and Dropped"
-                } else if (parseFloat(responses[questionId][2]) === parseFloat(option)) { //correct
-                    correctIncorrect[responses[questionId][1] + 'c'] += 1
-                    row.insertCell().innerText = "Correct ✅"
-                } else {
-                    // console.log(typeof(responses[questionId][2]), typeof(option))
-                    correctIncorrect[responses[questionId][1] + 'i'] += 1
-                    row.insertCell().innerText = "Wrong ❌"
+                } else if (responses[questionId].type === "SA") {
+                    totalAttempted += 1;
+                    row.insertCell().innerText = "SA";
+                    if (option === "Drop") {
+                        dropAwardedList.push(questionId);
+                        correctIncorrect[responses[questionId].section + 'c'] += 1;
+                        row.insertCell().innerText = "Attempted and Dropped";
+                    } else if (parseFloat(responses[questionId].givenAns) === parseFloat(option)) { //correct
+                        correctIncorrect[responses[questionId].section + 'c'] += 1;
+                        row.insertCell().innerText = "Correct ✅";
+                    } else {
+                        // console.log(typeof(responses[questionId][2]), typeof(option))
+                        correctIncorrect[responses[questionId].section + 'i'] += 1;
+                        row.insertCell().innerText = "Wrong ❌";
+                    }
+                    row.insertCell().innerText = responses[questionId].givenAns;
                 }
-                row.insertCell().innerText = responses[questionId][2]
             }
             row.insertCell().innerText = option;
             if (fetchedFromUrl) {
                 imageContainer = document.createElement("div");
                 imageContainer.setAttribute("class", "imageContainer");
-                imageContainer.appendChild((images[questionId].setAttribute("class", "questionImage"), images[questionId]));
+                imageContainer.appendChild(questionImages[questionId]);
                 imageContainer.setAttribute("onclick", "imageContainerClick(this)")
                 row.insertCell().appendChild(imageContainer);
+
+                if (!responses[questionId].attempted) {
+                    row.insertCell().innerText = "NA";
+                } else if (responses[questionId].type === "MCQ") {
+                    imageContainer = document.createElement("div");
+                    imageContainer.setAttribute("class", "imageContainer");
+                    imageContainer.appendChild(answerImages[questionId]);
+                    imageContainer.setAttribute("onclick", "imageContainerClick(this)")
+                    row.insertCell().appendChild(imageContainer);
+                } else if (responses[questionId].type === "SA") {
+                    row.insertCell().innerText = responses[questionId].givenAns;
+                }
             }
         } else {
             console.log("WTF")
@@ -256,7 +268,7 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, images) {
 
     resultStrings = [
         `<strong>Your total score is ${totalScore}</strong>`,
-        `Total no. of questions attempted is ${totalAttempted} (No. of correct also includes dropped questions for which you received marks) <hr>`,
+        `Total no. of questions attempted is ${totalAttempted} <hr>`,
         `<strong>Maths section A score is ${mathAscore}</strong>`,
         `<strong>Maths section B score is ${mathBscore}</strong>`,
         `Maths section A no. of correct is ${correctIncorrect["MAc"]}`,
@@ -317,8 +329,8 @@ function getAnskey(responsecontent) {
     }
 }
 
-// gets responses and responseSheetOrder and images
-function getResponses(responsecontent, responseSheetOrder, images) {
+// gets responses and responseSheetOrder and questionImages
+function getResponses(responsecontent, responseSheetOrder, questionImages, answerImages) {
     // var e = document.createElement("html");  // BAD method, don't ever use
     // e.innerHTML = responsecontent;
     // This is the correct way
@@ -344,30 +356,40 @@ function getResponses(responsecontent, responseSheetOrder, images) {
         questionId = questionIdMatch[1];
         responseSheetOrder.push(questionId)
 
-        // get images
+        // get questionImages
         if (fetchedFromUrl) {
             questionRowTbl = menutbls[i].parentElement.children[0]
             image = questionRowTbl.children[0].children[1].children[1].children[0];
             image.src = "https://cdn3.digialm.com" + image.getAttribute("src");
-            images[questionId] = image;
+            image.setAttribute("class", "questionImage");
+            questionImages[questionId] = image;
         }
 
         if (elementText.includes("Not Answered") || elementText.includes("Not Attempted")) {
             if (elementText.includes("MCQ")) {
-                var option1IdRegex = /Option\s*1\s*ID\s*:\s*(\d+)/;
-                var option2IdRegex = /Option\s*2\s*ID\s*:\s*(\d+)/;
-                var option3IdRegex = /Option\s*3\s*ID\s*:\s*(\d+)/;
-                var option4IdRegex = /Option\s*4\s*ID\s*:\s*(\d+)/;
-                var chosenOptionRegex = /Chosen\s*Option\s*:\s*(\d+)/;
-
-                var option1IdMatch = elementText.match(option1IdRegex);
-                var option2IdMatch = elementText.match(option2IdRegex);
-                var option3IdMatch = elementText.match(option3IdRegex);
-                var option4IdMatch = elementText.match(option4IdRegex);
-                optionIds = [option1IdMatch[1], option2IdMatch[1], option3IdMatch[1], option4IdMatch[1]]
-                responses[questionId] = ["NA", section, "MCQ", optionIds.sort()]
+                // var option1IdRegex = /Option\s*1\s*ID\s*:\s*(\d+)/;
+                // var option2IdRegex = /Option\s*2\s*ID\s*:\s*(\d+)/;
+                // var option3IdRegex = /Option\s*3\s*ID\s*:\s*(\d+)/;
+                // var option4IdRegex = /Option\s*4\s*ID\s*:\s*(\d+)/;
+                // var chosenOptionRegex = /Chosen\s*Option\s*:\s*(\d+)/;
+                // var option1IdMatch = elementText.match(option1IdRegex);
+                // var option2IdMatch = elementText.match(option2IdRegex);
+                // var option3IdMatch = elementText.match(option3IdRegex);
+                // var option4IdMatch = elementText.match(option4IdRegex);
+                // optionIds = [option1IdMatch[1], option2IdMatch[1], option3IdMatch[1], option4IdMatch[1]]
+                // responses[questionId] = ["NA", section, "MCQ", optionIds.sort()]
+                responses[questionId] = {
+                    attempted: false,
+                    section: section,
+                    type: "MCQ"
+                };
             } else {
-                responses[questionId] = ["NA", section, "SA"]
+                // responses[questionId] = ["NA", section, "SA"]
+                responses[questionId] = {
+                    attempted: false,
+                    section: section,
+                    type: "SA"
+                };
             }
         } else {
             if (elementText.includes("MCQ")) {
@@ -376,7 +398,6 @@ function getResponses(responsecontent, responseSheetOrder, images) {
                 var option3IdRegex = /Option\s*3\s*ID\s*:\s*(\d+)/;
                 var option4IdRegex = /Option\s*4\s*ID\s*:\s*(\d+)/;
                 var chosenOptionRegex = /Chosen\s*Option\s*:\s*(\d+)/;
-
                 var option1IdMatch = elementText.match(option1IdRegex);
                 var option2IdMatch = elementText.match(option2IdRegex);
                 var option3IdMatch = elementText.match(option3IdRegex);
@@ -384,7 +405,20 @@ function getResponses(responsecontent, responseSheetOrder, images) {
                 optionIds = [option1IdMatch[1], option2IdMatch[1], option3IdMatch[1], option4IdMatch[1]]
                 var chosenOptionMatch = elementText.match(chosenOptionRegex);
                 chosenOptionId = optionIds[parseInt(chosenOptionMatch[1]) - 1]
-                responses[questionId] = ["MCQ", section, chosenOptionId, optionIds.sort()]
+                // responses[questionId] = ["MCQ", section, chosenOptionId, optionIds.sort()]
+                responses[questionId] = {
+                    attempted: true,
+                    section: section,
+                    type: "MCQ",
+                    chosenOptionId: chosenOptionId
+                };
+
+                if (fetchedFromUrl) {
+                    image = questionRowTbl.children[0].children[2 + parseInt(chosenOptionMatch[1])].children[1].children[0];
+                    image.src = "https://cdn3.digialm.com" + image.getAttribute("src");
+                    image.setAttribute("class", "answerImage");
+                    answerImages[questionId] = image;
+                }
 
             } else {
                 questiontbl = menutbls[i].parentElement.children[0]
@@ -398,7 +432,13 @@ function getResponses(responsecontent, responseSheetOrder, images) {
                     ans = ansMatch[1];
                 }
                 // console.log("ans is ", ans)
-                responses[questionId] = ["SA", section, ans];
+                // responses[questionId] = ["SA", section, ans];
+                responses[questionId] = {
+                    attempted: true,
+                    section: section,
+                    type: "SA",
+                    givenAns: ans
+                };
 
             }
         }
@@ -443,7 +483,8 @@ marksElement = document.getElementById("marks");
 responses = null;
 anskey = null;
 responseSheetOrder = null;
-images = null;
+questionImages = null;
+answerImages = null;
 sortInAscendingOrder = true;
 
 function questionSort() {
@@ -455,7 +496,7 @@ function questionSort() {
     phyTable.innerHTML = phyTable.rows[0].innerHTML;
     chemTable.innerHTML = chemTable.rows[0].innerHTML;
     marksElement.innerHTML = "";
-    newMarksCalculator(responses, anskey, responseSheetOrder, images);
+    newMarksCalculator(responses, anskey, responseSheetOrder, questionImages, answerImages);
     scroll(scrollPos.x, scrollPos.y)
 }
 
@@ -548,16 +589,20 @@ async function fetchResponseSheet() {
 
 function main(responsecontent) {
     responseSheetOrder = [];
-    images = {};
-    responses = getResponses(responsecontent, responseSheetOrder, images);
+    questionImages = {};
+    answerImages = {};
+    responses = getResponses(responsecontent, responseSheetOrder, questionImages, answerImages);
     anskey = getAnskey(responsecontent);
     if (fetchedFromUrl) {
         showQuestions = true;
         mathTable.rows[0].insertCell().innerText = "Question";
+        mathTable.rows[0].insertCell().innerText = "Selected Answer";
         phyTable.rows[0].insertCell().innerText = "Question";
+        phyTable.rows[0].insertCell().innerText = "Selected Answer";
         chemTable.rows[0].insertCell().innerText = "Question";
+        chemTable.rows[0].insertCell().innerText = "Selected Answer";
     }
-    newMarksCalculator(responses, anskey, responseSheetOrder, images);
+    newMarksCalculator(responses, anskey, responseSheetOrder, questionImages, answerImages);
 }
 
 function fetchSheetAndCalculate() {
