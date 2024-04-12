@@ -321,7 +321,11 @@ function getAnskey(responsecontent) {
             "30/01/2024": mains30janshift2anskey,
             "31/01/2024": mains31janshift2anskey,
             "01/02/2024": mains1febshift2anskey,
-            "04/04/2024": mains4aprilshift2anskey
+            "04/04/2024": mains4aprilshift2anskey,
+            "05/04/2024": mains5aprilshift2anskey,
+            "06/04/2024": mains6aprilshift2anskey,
+            "08/04/2024": mains8aprilshift2anskey,
+            "09/04/2024": mains9aprilshift2anskey
         } [date]
     } else {
         return {
@@ -330,8 +334,11 @@ function getAnskey(responsecontent) {
             "30/01/2024": mains30janshift1anskey,
             "31/01/2024": mains31janshift1anskey,
             "01/02/2024": mains1febshift1anskey,
+            "04/04/2024": mains4aprilshift1anskey,
+            "05/04/2024": mains5aprilshift1anskey,
             "06/04/2024": mains6aprilshift1anskey,
-            "05/04/2024": mains5aprilshift1anskey
+            "08/04/2024": mains8aprilshift1anskey,
+            "09/04/2024": mains9aprilshift1anskey
         } [date]
     }
 }
