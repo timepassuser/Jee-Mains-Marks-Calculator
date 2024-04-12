@@ -298,6 +298,7 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, questionImage
         // console.log(i)
     };
 
+    marksElement.scrollIntoView()
 }
 
 function getAnskey(responsecontent) {
@@ -452,6 +453,7 @@ button = document.getElementById("button")
 urlErrorElement = document.getElementById("urlError")
 imageModal = document.getElementById("imageModal");
 modalArticle = document.getElementById("modalArticle");
+imageContainerDiv = document.getElementById("imageContainerDiv");
 responsecontent = null;
 fetchedFromUrl = false;
 showQuestions = false;
@@ -635,12 +637,12 @@ function downloadResponseSheet() {
 
 function imageContainerClick(element) {
     imageModal.style.display = "flex";
-    imageClone = element.children[0].cloneNode(true)
-    imageClone.style.margin = "5px";
-    modalArticle.appendChild(imageClone);
+    imageClone = element.children[0].cloneNode(true);
+    imageClone.setAttribute("class", "imageClone");
+    imageContainerDiv.appendChild(imageClone);
 }
 
 function closeModal() {
-    modalArticle.removeChild(modalArticle.children[modalArticle.childElementCount - 1])
+    imageContainerDiv.removeChild(imageContainerDiv.children[imageContainerDiv.childElementCount - 1])
     imageModal.style.display = "none";
 }

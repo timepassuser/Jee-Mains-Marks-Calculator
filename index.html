@@ -24,6 +24,10 @@
             font-size: large;
         }
 
+        img {
+            max-width: none;
+        }
+
         h1 {
             margin-top: 1%;
             font-family: "Helvetica Neue", sans-serif;
@@ -65,7 +69,6 @@
             margin: 0px 40px 70px 0px;
         }
 
-        /* CSS */
         #button {
             background-color: #ea4c89;
             border-radius: 8px;
@@ -148,6 +151,22 @@
 
         #imageModal {
             display: none;
+        }
+
+        .imageClone {
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            width: 200%
+        }
+
+        #imageContainerDiv {
+            display: table;
+        }
+
+        #modalArticle {
+            max-width: none;
+            width: 100%;
         }
 
         /* Loading animation */
@@ -270,6 +289,7 @@
             <article id="modalArticle">
                 <button onclick="closeModal()" aria-label="Close" rel="prev">Close Image</button>
                 <hr>
+                <div id="imageContainerDiv"></div>
             </article>
         </dialog>
 
