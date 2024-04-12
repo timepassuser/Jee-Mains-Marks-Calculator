@@ -307,8 +307,11 @@ function getAnskey(responsecontent) {
     // This is the correct way
     parser = new DOMParser()
     e = parser.parseFromString(responsecontent, "text/html");
-    table = e.getElementsByClassName("main-info-pnl")[0].children[2].children[0]
-    date = table.children[3].children[1].innerText
+    table = e.getElementsByClassName("main-info-pnl")[0].children[2].children[0];
+    if (!table) {
+        table = e.getElementsByClassName("main-info-pnl")[0].children[1].children[0];
+    }
+    date = table.children[3].children[1].innerText;
     time = table.children[4].children[1].innerText
 
     if (time === "3:00 PM - 6:00 PM") {
@@ -317,7 +320,8 @@ function getAnskey(responsecontent) {
             "29/01/2024": mains29janshift2anskey,
             "30/01/2024": mains30janshift2anskey,
             "31/01/2024": mains31janshift2anskey,
-            "01/02/2024": mains1febshift2anskey
+            "01/02/2024": mains1febshift2anskey,
+            "04/04/2024": mains4aprilshift2anskey
         } [date]
     } else {
         return {
@@ -326,7 +330,8 @@ function getAnskey(responsecontent) {
             "30/01/2024": mains30janshift1anskey,
             "31/01/2024": mains31janshift1anskey,
             "01/02/2024": mains1febshift1anskey,
-            "06/04/2024": mains6aprilshift1anskey
+            "06/04/2024": mains6aprilshift1anskey,
+            "05/04/2024": mains5aprilshift1anskey
         } [date]
     }
 }
