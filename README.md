@@ -11,7 +11,6 @@ To generate new answerkeys, use the parseAnswerKey function present in main.js. 
 
 ## Proxies
 proxies.js contains a proxy variable, you can change it however you will also need to modify fetchResponseSheet in main.js accordingly  
-The default proxy is https://github.com/timepassuser/corsproxy2, currently hosted on vercel
+The default proxies are https://github.com/timepassuser/corsproxy, currently hosted on vercel and https://github.com/timepassuser/corsproxy-worker, a cloudflare worker.
 
 ##### Hosted on https://timepassuser.github.io/Jee-Mains-Marks-Calculator/
-

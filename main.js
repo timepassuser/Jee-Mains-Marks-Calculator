@@ -551,7 +551,8 @@ async function fetchResponseSheet() {
     responsecontent = localStorage.getItem(href)
     if (responsecontent === null) {
 
-        // get response sheet using the proxy
+        // get response sheet using a random proxy
+        proxy = proxies[Math.floor(Math.random() * proxies.length)];
         try {
             document.getElementById("loader").style.display = "block";
             response = await fetch(`${proxy}`, {
