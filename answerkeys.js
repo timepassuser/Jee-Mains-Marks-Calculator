@@ -1,6 +1,6 @@
 // This file contains the final ans keys
 
-mains6aprilshift1anskey = {
+mains6aprilshift2anskey = {
     "68019114064": "68019155182",
     "68019114065": "68019155188",
     "68019114066": "68019155189",
