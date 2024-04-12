@@ -1,6 +1,6 @@
 // This file contains the final ans keys
 
-mains6aprilshift2anskey = {
+mains6aprilshift1anskey = {
     "68019114064": "68019155182",
     "68019114065": "68019155188",
     "68019114066": "68019155189",
@@ -94,7 +94,7 @@ mains6aprilshift2anskey = {
 }
 
 //generated via https://github.com/nikhilmwarrier/jee-2024-scraper/blob/main/keyscraper.js by prakul2006
-mains9aprilshift1anskey= {
+mains9aprilshift2anskey= {
   "68019114604": "68019156802",
   "68019114605": "68019156807",
   "68019114606": "68019156811",
