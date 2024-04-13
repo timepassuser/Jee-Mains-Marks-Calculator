@@ -1,7 +1,7 @@
 # Jee Mains Marks Calculator (2024)
 
 ## Usage
-You can calculate your marks by saving a copy of your responses as an html file, and uploading the file in the calculator
+You can calculate your marks from your response sheet url. OR, by saving a copy of your responses as an html file, and uploading the file in the calculator.
 
 ## Answerkeys
 The answerkeys.js file contains answer keys as js objects
