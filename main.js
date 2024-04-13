@@ -234,22 +234,25 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, questionImage
             }
             row.insertCell().innerText = option;
             if (fetchedFromUrl) {
-                imageContainer = document.createElement("div");
-                imageContainer.setAttribute("class", "imageContainer");
-                imageContainer.appendChild(questionImages[questionId]);
-                imageContainer.setAttribute("onclick", "imageContainerClick(this)")
+                imageContainer = createImageContainer(questionImages[questionId]);
                 row.insertCell().appendChild(imageContainer);
 
                 if (!responses[questionId].attempted) {
                     row.insertCell().innerText = "NA";
                 } else if (responses[questionId].type === "MCQ") {
-                    imageContainer = document.createElement("div");
-                    imageContainer.setAttribute("class", "imageContainer");
-                    imageContainer.appendChild(answerImages[questionId]);
-                    imageContainer.setAttribute("onclick", "imageContainerClick(this)")
+                    imageContainer = createImageContainer(answerImages[questionId]);
                     row.insertCell().appendChild(imageContainer);
                 } else if (responses[questionId].type === "SA") {
                     row.insertCell().innerText = responses[questionId].givenAns;
+                }
+
+                if (anskey[questionId] === "DROP") {
+                    row.insertCell().innerText = "Dropped";
+                } else if (responses[questionId].type === "MCQ") {
+                    imageContainer = createImageContainer(correctAnswerImages[questionId]);
+                    row.insertCell().appendChild(imageContainer);
+                } else if (responses[questionId].type === "SA") {
+                    row.insertCell().innerText = anskey[questionId];
                 }
             }
         } else {
@@ -344,7 +347,7 @@ function getAnskey(responsecontent) {
 }
 
 // gets responses and responseSheetOrder and questionImages
-function getResponses(responsecontent, responseSheetOrder, questionImages, answerImages) {
+function getResponses(responsecontent, responseSheetOrder, questionImages, answerImages, correctAnswerImages, anskey) {
     // var e = document.createElement("html");  // BAD method, don't ever use
     // e.innerHTML = responsecontent;
     // This is the correct way
@@ -374,31 +377,38 @@ function getResponses(responsecontent, responseSheetOrder, questionImages, answe
         if (fetchedFromUrl) {
             questionRowTbl = menutbls[i].parentElement.children[0]
             image = questionRowTbl.children[0].children[1].children[1].children[0];
-            image.src = "https://cdn3.digialm.com" + image.getAttribute("src");
-            image.setAttribute("class", "questionImage");
-            questionImages[questionId] = image;
+            questionImages[questionId] = "https://cdn3.digialm.com" + image.getAttribute("src");
         }
 
         if (elementText.includes("Not Answered") || elementText.includes("Not Attempted")) {
             if (elementText.includes("MCQ")) {
-                // var option1IdRegex = /Option\s*1\s*ID\s*:\s*(\d+)/;
-                // var option2IdRegex = /Option\s*2\s*ID\s*:\s*(\d+)/;
-                // var option3IdRegex = /Option\s*3\s*ID\s*:\s*(\d+)/;
-                // var option4IdRegex = /Option\s*4\s*ID\s*:\s*(\d+)/;
+                var option1IdRegex = /Option\s*1\s*ID\s*:\s*(\d+)/;
+                var option2IdRegex = /Option\s*2\s*ID\s*:\s*(\d+)/;
+                var option3IdRegex = /Option\s*3\s*ID\s*:\s*(\d+)/;
+                var option4IdRegex = /Option\s*4\s*ID\s*:\s*(\d+)/;
                 // var chosenOptionRegex = /Chosen\s*Option\s*:\s*(\d+)/;
-                // var option1IdMatch = elementText.match(option1IdRegex);
-                // var option2IdMatch = elementText.match(option2IdRegex);
-                // var option3IdMatch = elementText.match(option3IdRegex);
-                // var option4IdMatch = elementText.match(option4IdRegex);
-                // optionIds = [option1IdMatch[1], option2IdMatch[1], option3IdMatch[1], option4IdMatch[1]]
-                // responses[questionId] = ["NA", section, "MCQ", optionIds.sort()]
+                var option1IdMatch = elementText.match(option1IdRegex);
+                var option2IdMatch = elementText.match(option2IdRegex);
+                var option3IdMatch = elementText.match(option3IdRegex);
+                var option4IdMatch = elementText.match(option4IdRegex);
+                optionIds = [option1IdMatch[1], option2IdMatch[1], option3IdMatch[1], option4IdMatch[1]];
                 responses[questionId] = {
                     attempted: false,
                     section: section,
                     type: "MCQ"
                 };
+                if (fetchedFromUrl) {
+                    let temp;
+                    for (temp = 0; temp < optionIds.length; temp++) {
+                        if (optionIds[temp] === anskey[questionId]) {
+                            break;
+                        }
+                    }
+                    image = questionRowTbl.children[0].children[2 + temp + 1].children[1].children[0];
+                    correctAnswerImages[questionId] = "https://cdn3.digialm.com" + image.getAttribute("src");
+                }
+
             } else {
-                // responses[questionId] = ["NA", section, "SA"]
                 responses[questionId] = {
                     attempted: false,
                     section: section,
@@ -419,7 +429,6 @@ function getResponses(responsecontent, responseSheetOrder, questionImages, answe
                 optionIds = [option1IdMatch[1], option2IdMatch[1], option3IdMatch[1], option4IdMatch[1]]
                 var chosenOptionMatch = elementText.match(chosenOptionRegex);
                 chosenOptionId = optionIds[parseInt(chosenOptionMatch[1]) - 1]
-                // responses[questionId] = ["MCQ", section, chosenOptionId, optionIds.sort()]
                 responses[questionId] = {
                     attempted: true,
                     section: section,
@@ -429,9 +438,16 @@ function getResponses(responsecontent, responseSheetOrder, questionImages, answe
 
                 if (fetchedFromUrl) {
                     image = questionRowTbl.children[0].children[2 + parseInt(chosenOptionMatch[1])].children[1].children[0];
-                    image.src = "https://cdn3.digialm.com" + image.getAttribute("src");
-                    image.setAttribute("class", "answerImage");
-                    answerImages[questionId] = image;
+                    answerImages[questionId] = "https://cdn3.digialm.com" + image.getAttribute("src");
+
+                    let temp;
+                    for (temp = 0; temp < optionIds.length; temp++) {
+                        if (optionIds[temp] === anskey[questionId]) {
+                            break;
+                        }
+                    }
+                    image = questionRowTbl.children[0].children[2 + temp + 1].children[1].children[0];
+                    correctAnswerImages[questionId] = "https://cdn3.digialm.com" + image.getAttribute("src");
                 }
 
             } else {
@@ -500,6 +516,7 @@ anskey = null;
 responseSheetOrder = null;
 questionImages = null;
 answerImages = null;
+correctAnswerImages = null;
 sortInAscendingOrder = true;
 
 function questionSort() {
@@ -607,16 +624,20 @@ function main(responsecontent) {
     responseSheetOrder = [];
     questionImages = {};
     answerImages = {};
-    responses = getResponses(responsecontent, responseSheetOrder, questionImages, answerImages);
+    correctAnswerImages = {};
     anskey = getAnskey(responsecontent);
+    responses = getResponses(responsecontent, responseSheetOrder, questionImages, answerImages, correctAnswerImages, anskey);
     if (fetchedFromUrl) {
         showQuestions = true;
         mathTable.rows[0].insertCell().innerText = "Question";
         mathTable.rows[0].insertCell().innerText = "Selected Answer";
+        mathTable.rows[0].insertCell().innerText = "Correct Answer";
         phyTable.rows[0].insertCell().innerText = "Question";
         phyTable.rows[0].insertCell().innerText = "Selected Answer";
+        phyTable.rows[0].insertCell().innerText = "Correct Answer";
         chemTable.rows[0].insertCell().innerText = "Question";
         chemTable.rows[0].insertCell().innerText = "Selected Answer";
+        chemTable.rows[0].insertCell().innerText = "Correct Answer";
     }
     newMarksCalculator(responses, anskey, responseSheetOrder, questionImages, answerImages);
 }
@@ -658,4 +679,15 @@ function imageContainerClick(element) {
 function closeModal() {
     imageContainerDiv.removeChild(imageContainerDiv.children[imageContainerDiv.childElementCount - 1])
     imageModal.style.display = "none";
+}
+
+function createImageContainer(imageSrc) {
+    image = document.createElement("img");
+    image.setAttribute("class", "answerImage");
+    image.setAttribute("src", imageSrc);
+    imageContainer = document.createElement("div");
+    imageContainer.setAttribute("class", "imageContainer");
+    imageContainer.appendChild(image);
+    imageContainer.setAttribute("onclick", "imageContainerClick(this)")
+    return imageContainer
 }
