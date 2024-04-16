@@ -1,4 +1,5 @@
 # Jee Mains Marks Calculator (2024)
+![tutorial gif](https://github.com/timepassuser/Jee-Mains-Marks-Calculator/blob/main/tutorial.gif)
 
 ## Usage
 You can calculate your marks from your response sheet url. OR, by saving a copy of your responses as an html file, and uploading the file in the calculator.
