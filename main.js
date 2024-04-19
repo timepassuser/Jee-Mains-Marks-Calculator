@@ -246,13 +246,18 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, questionImage
                     row.insertCell().innerText = responses[questionId].givenAns;
                 }
 
-                if (anskey[questionId] === "DROP") {
+                if (option === "DROP") {
                     row.insertCell().innerText = "Dropped";
                 } else if (responses[questionId].type === "MCQ") {
-                    imageContainer = createImageContainer(correctAnswerImages[questionId]);
-                    row.insertCell().appendChild(imageContainer);
+                    imageCell = row.insertCell();
+                    for (let z = 0; z < correctAnswerImages[questionId].length; z++) {
+                        correctAnswerImage = correctAnswerImages[questionId][z];
+                        imageContainer = createImageContainer(correctAnswerImage);
+                        imageCell.appendChild(imageContainer);
+                        imageCell.innerHTML += "<br>"
+                    }
                 } else if (responses[questionId].type === "SA") {
-                    row.insertCell().innerText = anskey[questionId];
+                    row.insertCell().innerText = option;
                 }
             }
         } else {
@@ -398,14 +403,20 @@ function getResponses(responsecontent, responseSheetOrder, questionImages, answe
                     type: "MCQ"
                 };
                 if (fetchedFromUrl) {
-                    let temp;
-                    for (temp = 0; temp < optionIds.length; temp++) {
-                        if (optionIds[temp] === anskey[questionId]) {
-                            break;
+                    correctAnswerImages[questionId] = [];
+                    correctOptions = anskey[questionId].split(",");
+                    for (let z = 0; z < correctOptions.length; z++) {
+                        correctOption = correctOptions[z];
+                        let temp;
+                        for (temp = 0; temp < optionIds.length; temp++) {
+                            if (optionIds[temp] === correctOption) {
+                                break;
+                            }
                         }
+
+                        image = questionRowTbl.children[0].children[2 + temp + 1].children[1].children[0];
+                        correctAnswerImages[questionId].push("https://cdn3.digialm.com" + image.getAttribute("src"));
                     }
-                    image = questionRowTbl.children[0].children[2 + temp + 1].children[1].children[0];
-                    correctAnswerImages[questionId] = "https://cdn3.digialm.com" + image.getAttribute("src");
                 }
 
             } else {
@@ -440,14 +451,20 @@ function getResponses(responsecontent, responseSheetOrder, questionImages, answe
                     image = questionRowTbl.children[0].children[2 + parseInt(chosenOptionMatch[1])].children[1].children[0];
                     answerImages[questionId] = "https://cdn3.digialm.com" + image.getAttribute("src");
 
-                    let temp;
-                    for (temp = 0; temp < optionIds.length; temp++) {
-                        if (optionIds[temp] === anskey[questionId]) {
-                            break;
+                    correctAnswerImages[questionId] = [];
+                    correctOptions = anskey[questionId].split(",");
+                    for (let z = 0; z < correctOptions.length; z++) {
+                        correctOption = correctOptions[z];
+                        let temp;
+                        for (temp = 0; temp < optionIds.length; temp++) {
+                            if (optionIds[temp] === correctOption) {
+                                break;
+                            }
                         }
+                        console.log(z);
+                        image = questionRowTbl.children[0].children[2 + temp + 1].children[1].children[0];
+                        correctAnswerImages[questionId].push("https://cdn3.digialm.com" + image.getAttribute("src"));
                     }
-                    image = questionRowTbl.children[0].children[2 + temp + 1].children[1].children[0];
-                    correctAnswerImages[questionId] = "https://cdn3.digialm.com" + image.getAttribute("src");
                 }
 
             } else {
