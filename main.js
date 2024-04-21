@@ -186,7 +186,7 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, questionImage
             if (!responses[questionId].attempted) { // Not attempted
                 // console.log("Not attempted", responses[questionId])
                 row.insertCell().innerText = responses[questionId].type // type of question
-                if (option === "Drop" && responses[questionId].type === "MCQ") {
+                if (option.toLowerCase() === "drop" && responses[questionId].type === "MCQ") {
                     dropAwardedList.push(questionId)
                     correctIncorrect[responses[questionId].section + 'c'] += 1
                     row.insertCell().innerText = "Not Attempted and Dropped";
@@ -199,7 +199,7 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, questionImage
                     totalAttempted += 1;
                     row.insertCell().innerText = "MCQ";
                     // console.log(responses[questionId][2], responses[questionId][3], option)
-                    if (option === "Drop") {
+                    if (option.toLowerCase() === "drop") {
                         dropAwardedList.push(questionId);
                         correctIncorrect[responses[questionId].section + 'c'] += 1;
                         row.insertCell().innerText = "Attempted and Dropped";
@@ -217,7 +217,7 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, questionImage
                 } else if (responses[questionId].type === "SA") {
                     totalAttempted += 1;
                     row.insertCell().innerText = "SA";
-                    if (option === "Drop") {
+                    if (option.toLowerCase() === "drop") {
                         dropAwardedList.push(questionId);
                         correctIncorrect[responses[questionId].section + 'c'] += 1;
                         row.insertCell().innerText = "Attempted and Dropped";
@@ -246,7 +246,7 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, questionImage
                     row.insertCell().innerText = responses[questionId].givenAns;
                 }
 
-                if (option === "DROP") {
+                if (option.toLowerCase() === "drop") {
                     row.insertCell().innerText = "Dropped";
                 } else if (responses[questionId].type === "MCQ") {
                     imageCell = row.insertCell();
@@ -407,7 +407,7 @@ function getResponses(responsecontent, responseSheetOrder, questionImages, answe
                     correctOptions = anskey[questionId].split(",");
                     for (let z = 0; z < correctOptions.length; z++) {
                         correctOption = correctOptions[z];
-                        if (correctOption === "DROP") {
+                        if (correctOption.toLowerCase() === "drop") {
                             break;
                         }
                         let temp;
@@ -458,7 +458,7 @@ function getResponses(responsecontent, responseSheetOrder, questionImages, answe
                     correctOptions = anskey[questionId].split(",");
                     for (let z = 0; z < correctOptions.length; z++) {
                         correctOption = correctOptions[z];
-                        if (correctOption === "DROP") {
+                        if (correctOption.toLowerCase() === "drop") {
                             break;
                         }
                         let temp;
