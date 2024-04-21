@@ -176,7 +176,7 @@ function newMarksCalculator(responses, anskey, responseSheetOrder, questionImage
 
     for (let questionId of (sortInAscendingOrder ? Object.keys(anskey).sort() : responseSheetOrder)) {
         option = anskey[questionId]
-        if (option === "Drop") {
+        if (option.toLowerCase() === "drop") {
             droppedInAnskey += 1
         }
         subjectTable = subjectTables[responses[questionId].section]
@@ -407,6 +407,9 @@ function getResponses(responsecontent, responseSheetOrder, questionImages, answe
                     correctOptions = anskey[questionId].split(",");
                     for (let z = 0; z < correctOptions.length; z++) {
                         correctOption = correctOptions[z];
+                        if (correctOption === "DROP") {
+                            break;
+                        }
                         let temp;
                         for (temp = 0; temp < optionIds.length; temp++) {
                             if (optionIds[temp] === correctOption) {
@@ -455,13 +458,20 @@ function getResponses(responsecontent, responseSheetOrder, questionImages, answe
                     correctOptions = anskey[questionId].split(",");
                     for (let z = 0; z < correctOptions.length; z++) {
                         correctOption = correctOptions[z];
+                        if (correctOption === "DROP") {
+                            break;
+                        }
                         let temp;
                         for (temp = 0; temp < optionIds.length; temp++) {
+                            // console.log("here", optionIds[temp]);
                             if (optionIds[temp] === correctOption) {
                                 break;
                             }
                         }
-                        console.log(z);
+                        // console.log("option ids length is", optionIds.length)
+                        // console.log(z);
+                        // console.log(temp);
+                        // console.log(correctOption)
                         image = questionRowTbl.children[0].children[2 + temp + 1].children[1].children[0];
                         correctAnswerImages[questionId].push("https://cdn3.digialm.com" + image.getAttribute("src"));
                     }
