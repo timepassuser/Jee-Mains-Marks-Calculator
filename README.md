@@ -4,6 +4,9 @@
 ## Usage
 You can calculate your marks from your response sheet url. OR, by saving a copy of your responses as an html file, and uploading the file in the calculator.
 
+## How it works
+Upon clicking the "Get response sheet html and calculate score" button, a request is sent to a cors proxy to fetch the response sheet. The fetched content is then parsed to generate the result. The images links are inserted into the analysis tables for easy cross checking.
+
 ## Answerkeys
 The answerkeys.js file contains answer keys as js objects
 
