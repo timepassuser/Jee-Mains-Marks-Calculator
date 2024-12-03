@@ -558,7 +558,7 @@ mains6aprilshift2anskey = {
     "87827055967": "287"
 }
 
-mains8aprilshift1anskey = {
+mains7aprilshift1anskey = {
     "68019114334": "68019155993",
     "68019114335": "68019155995",
     "68019114336": "68019156002",
