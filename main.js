@@ -354,6 +354,7 @@ function getAnskey(responsecontent) {
             // "06/04/2024": mains6aprilshift1anskey,
             // "08/04/2024": mains8aprilshift1anskey,
             // "09/04/2024": mains9aprilshift1anskey,
+            "22/01/2025": mains2025_22janshift1,
             "23/01/2025": mains2025_23janshift1,
             "24/01/2025": mains2025_24janshift1,
             "28/01/2025": mains2025_28janshift1,
