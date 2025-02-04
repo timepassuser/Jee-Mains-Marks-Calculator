@@ -2,5 +2,5 @@
 proxies = [
     // "https://corsproxy-worker.timepassuser.workers.dev"
     // "https://jeemarkscalculator.vercel.app"
-    "https://jeemarkscalculator.timepassuser.workers.dev"
+    "https://jeemarkscalculator.stupidnta.workers.dev"
 ]
