@@ -315,7 +315,9 @@ function getAnskey(responsecontent) {
     // This is the correct way
     parser = new DOMParser()
     e = parser.parseFromString(responsecontent, "text/html");
-    table = e.getElementsByClassName("main-info-pnl")[0].children[2].children[0];
+    // worked in 2024
+    // table = e.getElementsByClassName("main-info-pnl")[0].children[2].children[0];
+    table = e.getElementsByClassName("main-info-pnl")[0].children[0].children[1].children[0];
     if (!table) {
         table = e.getElementsByClassName("main-info-pnl")[0].children[1].children[0];
     }
@@ -324,29 +326,38 @@ function getAnskey(responsecontent) {
 
     if (time === "3:00 PM - 6:00 PM") {
         return {
-            "27/01/2024": mains27janshift2anskey,
-            "29/01/2024": mains29janshift2anskey,
-            "30/01/2024": mains30janshift2anskey,
-            "31/01/2024": mains31janshift2anskey,
-            "01/02/2024": mains1febshift2anskey,
-            "04/04/2024": mains4aprilshift2anskey,
-            "05/04/2024": mains5aprilshift2anskey,
-            "06/04/2024": mains6aprilshift2anskey,
-            "08/04/2024": mains8aprilshift2anskey,
-            "09/04/2024": mains9aprilshift2anskey
+            // "27/01/2024": mains27janshift2anskey,
+            // "29/01/2024": mains29janshift2anskey,
+            // "30/01/2024": mains30janshift2anskey,
+            // "31/01/2024": mains31janshift2anskey,
+            // "01/02/2024": mains1febshift2anskey,
+            // "04/04/2024": mains4aprilshift2anskey,
+            // "05/04/2024": mains5aprilshift2anskey,
+            // "06/04/2024": mains6aprilshift2anskey,
+            // "08/04/2024": mains8aprilshift2anskey,
+            // "09/04/2024": mains9aprilshift2anskey,
+            "22/01/2025":mains2025_22janshift2,
+            "23/01/2025": mains2025_23janshift2,
+            "24/01/2025": mains2025_24janshift2,
+            "28/01/2025": mains2025_28janshift2,
+            "29/01/2025": mains2025_29janshift2
         } [date]
     } else {
         return {
-            "27/01/2024": mains27janshift1anskey,
-            "29/01/2024": mains29janshift1anskey,
-            "30/01/2024": mains30janshift1anskey,
-            "31/01/2024": mains31janshift1anskey,
-            "01/02/2024": mains1febshift1anskey,
-            "04/04/2024": mains4aprilshift1anskey,
-            "05/04/2024": mains5aprilshift1anskey,
-            "06/04/2024": mains6aprilshift1anskey,
-            "08/04/2024": mains8aprilshift1anskey,
-            "09/04/2024": mains9aprilshift1anskey
+            // "27/01/2024": mains27janshift1anskey,
+            // "29/01/2024": mains29janshift1anskey,
+            // "30/01/2024": mains30janshift1anskey,
+            // "31/01/2024": mains31janshift1anskey,
+            // "01/02/2024": mains1febshift1anskey,
+            // "04/04/2024": mains4aprilshift1anskey,
+            // "05/04/2024": mains5aprilshift1anskey,
+            // "06/04/2024": mains6aprilshift1anskey,
+            // "08/04/2024": mains8aprilshift1anskey,
+            // "09/04/2024": mains9aprilshift1anskey,
+            "23/01/2025": mains2025_23janshift1,
+            "24/01/2025": mains2025_24janshift1,
+            "28/01/2025": mains2025_28janshift1,
+            "29/01/2025": mains2025_29janshift1
         } [date]
     }
 }
