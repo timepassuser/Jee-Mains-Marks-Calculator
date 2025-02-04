@@ -3,5 +3,6 @@ proxies = [
     // "https://corsproxy-worker.timepassuser.workers.dev"
     // "https://jeemarkscalculator.vercel.app"
     // "https://jeemarkscalculator.stupidnta.workers.dev"
-    "https://testing.workkkkkkk.workers.dev/"
+    // "https://testing.workkkkkkk.workers.dev/"
+    "https://testing.workkkk.workers.dev/"
 ]
