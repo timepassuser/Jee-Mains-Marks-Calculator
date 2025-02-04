@@ -4,5 +4,5 @@ proxies = [
     // "https://jeemarkscalculator.vercel.app"
     // "https://jeemarkscalculator.stupidnta.workers.dev"
     // "https://testing.workkkkkkk.workers.dev/"
-    "https://dbe534e4-testing.workkkkkkkkkk.workers.dev/"
+    "https://testing.workkkkkkkkkk.workers.dev/"
 ]
