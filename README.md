@@ -1,4 +1,5 @@
 # Jee Mains Marks Calculator (2024)
+#### No longer updated
 ![tutorial gif](https://github.com/timepassuser/Jee-Mains-Marks-Calculator/blob/main/tutorial.gif)
 
 ## Usage
